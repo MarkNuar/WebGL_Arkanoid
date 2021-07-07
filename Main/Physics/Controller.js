@@ -1,9 +1,62 @@
+// time management
+var lastUpdateTime = (new Date).getTime();
+var currentTime; 
+var deltaTime;
+
+// create ball 
+var ball = new Ball(new Vec2(4.6, 2));
+
+// create bricks
+var brick0 = new Brick(new Vec2(-30,5), new Vec2(10,5));
+var brick1 = new Brick(new Vec2(-25,5), new Vec2(10,5));
+var brick2 = new Brick(new Vec2(-20,5), new Vec2(10,5));
+var brick3 = new Brick(new Vec2(-15,5), new Vec2(10,5));
+var brick4 = new Brick(new Vec2(-10,5), new Vec2(10,5));
+var brickList = [
+    brick0,
+    brick1, 
+    brick2, 
+    brick3,
+    brick4
+]
+
+// create walls
+var wallR = new Wall(new Vec2(0,0), new Vec2(0,0));
+var wallL = new Wall(new Vec2(0,0), new Vec2(0,0));
+var wallU = new Wall(new Vec2(0,0), new Vec2(0,0));
+var wallList = [
+    wallR, 
+    wallL, 
+    wallU
+]
+
+// create paddle
+var paddle = new Paddle(new Vec2(0,-10), new Vec2(10,5));
 
 
 // function to update the game state
 function updateGameState()
 {
-    // all i can see is emptiness
+    // update delta time 
+    currentTime = (new Date).getTime();
+    deltaTime = currentTime - lastUpdateTime;
+    lastUpdateTime = currentTime;
+
+
+    ball.moveBall(deltaTime);
+
+    // todo paddle move paddle (input, deltatime);
+
+    // loop over all objects in level and check collision with them 
+    brickList.forEach(brick => {
+        ball.checkAndHandleCollision(brick);
+    });
+
+    wallList.forEach(wall => {
+        ball.checkAndHandleCollision(wall);
+    });
+    
+    ball.checkAndHandleCollision(paddle);
 }
 
 

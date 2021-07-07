@@ -4,7 +4,6 @@ var gl;
 var baseDir;
 var shaderDir;
 
-
 //camera variables
 var cx = 0;
 var cy = 13.5;
@@ -31,7 +30,7 @@ var done = false;
 //this functions converts a string representing a color in hexadecimal in the form "#xxxxxx"
 //to a vector of 3 component: R, G, B. 
 function fromHexToRGBVec(hex) {
-    col = hex.substring(1,7);
+      col = hex.substring(1,7);
       R = parseInt(col.substring(0,2) ,16) / 255;
       G = parseInt(col.substring(2,4) ,16) / 255;
       B = parseInt(col.substring(4,6) ,16) / 255;
@@ -41,7 +40,7 @@ function fromHexToRGBVec(hex) {
 function main()
 {
     // clear the canvas
-    gl.clearColor(0.85, 0.85, 0.85, 1.0);
+    gl.clearColor(0.00, 0.00, 0.00, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     gl.enable(gl.DEPTH_TEST); 
 
@@ -120,7 +119,9 @@ function main()
     }
 
     for (let i in allMeshes)
-    addMeshToScene(i);
+    {
+      addMeshToScene(i);
+    }
 
 
     drawScene();
@@ -131,6 +132,21 @@ function drawScene() // todo SE NON VA UN CAZZO, QUESTA ERA DENTRO MAIN
 {
     // todo tomorrow        
     window.requestAnimationFrame(drawScene);
+
+    // update game state, animations
+    Controller.updateGameState();
+
+    // clear the canvas
+    gl.clearColor(0.00, 0.00, 0.00, 1.0);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+    // update world matrices for moving objects 
+    ballMatrix = getBallMatrix(ball.position.x, ball.position.y);
+    paddleMatrix = getPaddleMatrix(paddle.position.x); 
+    for (let i = 0; i < currentBrickMatrices; i++) {
+      currentBrickMatrices[i] = getBrickMatrix(i, brickList[i].disabled);
+    }
+
 }
 
 
