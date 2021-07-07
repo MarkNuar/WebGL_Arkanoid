@@ -4,29 +4,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="Resources/icon.png">
+    <link rel="stylesheet" type="text/css" href="style.css">
     <title>Arkanoid</title>
-    <style type="text/css">
-      canvas{
-        background-color: whitesmoke;
-      }
-    </style>
-
     <script type="text/javascript" src="Libraries/utils.js"></script>
     <script type="text/javascript" src="drawing.js"></script>
 
 </head>
 
 
-<body style="overflow: hidden; margin: 0px; width: 100%; height: 100%; background-repeat: no-repeat; background-size: cover;">
+<body class="body">
   <canvas id="canvas">
     Your browser does not support the HTML5 canvas element.
   </canvas>
 
-  <p>
-    <h1 style="color: black; position: absolute; z-index: 1; text-align: center; top: 10px; width: 16%; background-color:transparent; opacity: 1.0; padding: 1px 10px 1px 10px; overflow:auto; justify-content: space-between;">
+  <div class="centerDiv">
+    <h1 class="title">
       ARKANOID
     </h1>
-  </p>
+  </div>
   
   <!-- TODO: ADD MUSIC -->
 

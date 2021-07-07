@@ -1,0 +1,32 @@
+@font-face {
+    font-family: Retronoid;
+    src: url('Resources/Retronoid.ttf');
+}
+
+.body{
+    overflow: hidden;
+    margin: 0px; 
+    width: 100%; 
+    height: 100%; 
+    background-repeat: no-repeat; 
+    background-size: cover;
+    background-color: black;
+}
+
+.centerDiv{
+    position: absolute;
+    width: 100%;
+    height: 10%;
+    top: 2%;
+    text-align: center;
+}
+
+.title{
+    height: 100%;
+    margin: 0%;
+    font-size: 8vmin;
+    font-family: "Retronoid";
+    color: white; 
+    opacity: 1.0; 
+    overflow:auto;
+}
