@@ -46,9 +46,8 @@ var currentMatricesList = [
     brickMatrix3,   // 8
     brickMatrix4    // 9
     // other bricks...
-]
+];
 
-var numberOfNonBricks = 5; // number of objects that are not bricks
 
 
 function getBallMatrix(ballX, ballY)
@@ -56,7 +55,7 @@ function getBallMatrix(ballX, ballY)
     return utils.MakeWorld(ballX, ballY, 0, 0, 0, 0, 1);
 }
 
-function getBrickMatrix(brickIndex, disabled)
+function getBrickMatrix(matrixListIndex, disabled)
 {
     if(disabled)
     {
@@ -64,7 +63,7 @@ function getBrickMatrix(brickIndex, disabled)
     }
     else
     {
-        return currentBrickMatrices[brickIndex];
+        return currentMatricesList[matrixListIndex];
     }
 }
 

@@ -23,11 +23,6 @@ class Ball
     moveBall(deltaTime)
     {
         this.position = this.position.add(this.velocity.scale(deltaTime));
-        
-        // todo: if collision with wall, change direction
-        // todo: if collision with deathWall (the one in the bottom) respawn ball
-            // position = initialPosition
-            // this.velocity = new Vec2(0,0);
     }
 
     checkAndHandleCollision(otherObject)

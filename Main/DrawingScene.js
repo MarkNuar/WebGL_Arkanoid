@@ -14,7 +14,16 @@ var ang = 180;
 
 // meshes
 var ballMesh;
-var cubeMesh;
+var paddleMesh;
+var wallMeshR;
+var wallMeshL;
+var wallMeshU;
+var brickMesh0;
+var brickMesh1;
+var brickMesh2;
+var brickMesh3;
+var brickMesh4;
+
 // todo add other meshes
 
 
@@ -34,42 +43,42 @@ function main()
     gl.enable(gl.DEPTH_TEST); 
 
     // define material color 
-    var materialColor = [1.0, 1.0, 1.0]; // this will be multipled by the texture color
+    var materialDiffColor = [1.0, 1.0, 1.0, 1.0]; // this will be multipled by the texture color
 
     // define ambient light color and material
-    var ambientLight = [0.15, 0.9, 0.8];
-    var ambientMat = [0.4, 0.2, 0.6];
+    var ambientLight = [0.15, 0.9, 0.8, 1.0];
+    var ambientMat = [0.4, 0.2, 0.6, 1.0];
 
     //define specular component of color
-    var specularColor = [1.0, 1.0, 1.0];
+    var specularColor = [1.0, 1.0, 1.0, 1.0];
     var specShine = 10.0;
 
     // get attributes and normal location
     var positionAttributeLocation = gl.getAttribLocation(program, "inPosition");
     var normalAttributeLocation = gl.getAttribLocation(program, "inNormal");
     var uvAttributeLocation = gl.getAttribLocation(program, "in_uv");
-    var textLocation = gl.getUniformLocation(program, "in_texture");
+    // texture
+    var textureLocation = gl.getUniformLocation(program, "in_texture");
+    // matrix
     var matrixLocation = gl.getUniformLocation(program, "matrix");
+    // ambient light
     var ambientLightColorHandle = gl.getUniformLocation(program, "ambientLightCol");
     var ambientMaterialHandle = gl.getUniformLocation(program, "ambientMat");
+    // material diffuse color
     var materialDiffColorHandle = gl.getUniformLocation(program, 'mDiffColor');
+    // blinn color and brightness
     var specularColorHandle = gl.getUniformLocation(program, "specularColor");
     var shineSpecularHandle = gl.getUniformLocation(program, "specShine");
-    var emissionColorHandle = gl.getUniformLocation(program, "emit");    
-    var lightDirectionHandleA = gl.getUniformLocation(program, 'lightDirectionA');
-    var lightColorHandleA = gl.getUniformLocation(program, 'lightColorA');
-    var lightDirectionHandleB = gl.getUniformLocation(program, 'lightDirectionB');
-    var lightColorHandleB = gl.getUniformLocation(program, 'lightColorB');
-
+    // directional light
+    var lightDirectionHandle = gl.getUniformLocation(program, 'lightDirection');
+    var lightColorHandle = gl.getUniformLocation(program, 'lightColor');
+    // corrected matrices
     var normalMatrixPositionHandle = gl.getUniformLocation(program, 'nMatrix');
     var worldViewMatrixPositionHandle = gl.getUniformLocation(program, 'worldViewMatrix');
 
-    var pointLightPositionHandle = gl.getUniformLocation(program, 'pLPos');
-    var pointLightColorHandle = gl.getUniformLocation(program, 'pLCol');
 
     // perspective matrix
     var perspectiveMatrix = utils.MakePerspective(90, gl.canvas.width / gl.canvas.height, 0.1, 100.0);
-  
     // view matrix
     var viewMatrix = utils.MakeView(cx, cy, cz, elev, ang);
 
@@ -112,11 +121,8 @@ function main()
       addMeshToScene(i);
     }
 
-    function drawScene() // todo SE NON VA UN CAZZO, QUESTA ERA DENTRO MAIN
+    function drawScene()
     {
-        // todo tomorrow        
-        window.requestAnimationFrame(drawScene);
-
         // update game state, animations
         Controller.updateGameState();
 
@@ -127,10 +133,19 @@ function main()
         // update world matrices for moving objects 
         currentMatricesList[0] = getBallMatrix(ball.position.x, ball.position.y);
         currentMatricesList[1] = getPaddleMatrix(paddle.position.x);
-        for (let i = 5; i < currentMatricesList; i++) 
+        // walls not touched
+        for (let i = 5; i < currentMatricesList.length; i++) 
         {
             currentMatricesList[i] = getBrickMatrix(i, brickList[i].disabled);
         }
+
+        // directional light 
+        
+
+
+
+        // todo tomorrow        
+        window.requestAnimationFrame(drawScene);
     }
 
     drawScene();
@@ -179,12 +194,29 @@ async function init() {
   
     // load meshes from obj files
     async function loadMeshes() {
-        ballMesh = await utils.loadMesh(modelsDir + "Ball.obj");
-        cubeMesh = await utils.loadMesh(modelsDir + "Cube.obj");
-    
+        ballMesh = await utils.loadMesh(modelsDir + "ball.obj");
+        paddleMesh = await utils.loadMesh(modelsDir + "paddle.obj");
+        wallMeshR = await utils.loadMesh(modelsDir + "wall.obj");
+        wallMeshL = await utils.loadMesh(modelsDir + "wall.obj");
+        wallMeshU = await utils.loadMesh(modelsDir + "wall.obj");
+        brickMesh0 = await utils.loadMesh(modelsDir + "brick.obj");
+        brickMesh1 = await utils.loadMesh(modelsDir + "brick.obj");
+        brickMesh2 = await utils.loadMesh(modelsDir + "brick.obj");
+        brickMesh3 = await utils.loadMesh(modelsDir + "brick.obj");
+        brickMesh4 = await utils.loadMesh(modelsDir + "brick.obj");
+
         allMeshes = [
-            ballMesh, 
-            cubeMesh // todo add other objects
+            ballMesh,
+            paddleMesh,
+            wallMeshR, 
+            wallMeshL,
+            wallMeshU, 
+            brickMesh0,
+            brickMesh1,
+            brickMesh2,
+            brickMesh3,
+            brickMesh4
+            // add more bricks
         ];
     }
   } 

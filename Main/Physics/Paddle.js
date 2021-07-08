@@ -7,10 +7,21 @@ class Paddle
         this.canBeDisabled = false;
         this.disabled = false;
         this.isPaddle = false;
+        this.speed = PADDLE_SPEED;
     }
 
-    movePaddle()
+    moveLeft = false;
+    moveRight = false;
+
+    movePaddle(deltaTime)
     {
-        /// 
+        if(this.moveLeft)
+        {
+            this.position.x -= this.speed * deltaTime;
+        }
+        else if(this.moveRight)
+        {
+            this.position.x += this.speed * deltaTime;
+        }
     }
 }
