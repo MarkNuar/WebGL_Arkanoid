@@ -26,17 +26,6 @@ var done = false;
 //global variables
 // todo add here global variables if needed
 
-
-//this functions converts a string representing a color in hexadecimal in the form "#xxxxxx"
-//to a vector of 3 component: R, G, B. 
-function fromHexToRGBVec(hex) {
-      col = hex.substring(1,7);
-      R = parseInt(col.substring(0,2) ,16) / 255;
-      G = parseInt(col.substring(2,4) ,16) / 255;
-      B = parseInt(col.substring(4,6) ,16) / 255;
-    return [R,G,B]
-}
-
 function main()
 {
     // clear the canvas
@@ -123,32 +112,29 @@ function main()
       addMeshToScene(i);
     }
 
+    function drawScene() // todo SE NON VA UN CAZZO, QUESTA ERA DENTRO MAIN
+    {
+        // todo tomorrow        
+        window.requestAnimationFrame(drawScene);
+
+        // update game state, animations
+        Controller.updateGameState();
+
+        // clear the canvas
+        gl.clearColor(0.00, 0.00, 0.00, 1.0);
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+        // update world matrices for moving objects 
+        currentMatricesList[0] = getBallMatrix(ball.position.x, ball.position.y);
+        currentMatricesList[1] = getPaddleMatrix(paddle.position.x);
+        for (let i = 5; i < currentMatricesList; i++) 
+        {
+            currentMatricesList[i] = getBrickMatrix(i, brickList[i].disabled);
+        }
+    }
 
     drawScene();
 }
-
-
-function drawScene() // todo SE NON VA UN CAZZO, QUESTA ERA DENTRO MAIN
-{
-    // todo tomorrow        
-    window.requestAnimationFrame(drawScene);
-
-    // update game state, animations
-    Controller.updateGameState();
-
-    // clear the canvas
-    gl.clearColor(0.00, 0.00, 0.00, 1.0);
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-    // update world matrices for moving objects 
-    ballMatrix = getBallMatrix(ball.position.x, ball.position.y);
-    paddleMatrix = getPaddleMatrix(paddle.position.x); 
-    for (let i = 0; i < currentBrickMatrices; i++) {
-      currentBrickMatrices[i] = getBrickMatrix(i, brickList[i].disabled);
-    }
-
-}
-
 
 async function init() {
   
@@ -161,47 +147,46 @@ async function init() {
   
     // prepare canvas and body styles
     function setupCanvas() {
-      var canvas = document.getElementById("canvas");
-      gl = canvas.getContext("webgl2");
-  
-      if (!gl) {
-        document.write("GL context not opened");
-        return;
-      }
-      utils.resizeCanvasToDisplaySize(canvas);
-      gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+        var canvas = document.getElementById("canvas");
+        gl = canvas.getContext("webgl2");
+    
+        if (!gl) {
+            document.write("GL context not opened");
+            return;
+        }
+        utils.resizeCanvasToDisplaySize(canvas);
+        gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
     }
   
     //load shaders
     async function loadShaders() {
-      // initialize resource paths
-      var path = window.location.pathname;
-      var page = path.split("/").pop();
-      baseDir = window.location.href.replace(page, '');
-      shaderDir = baseDir + "Shaders/";
-      modelsDir = baseDir + "Models/";
-  
-      // load vertex and fragment shaders from file
-      await utils.loadFiles([shaderDir + 'vs.glsl', shaderDir + 'fs.glsl'], function (shaderText) {
-        var vertexShader = utils.createShader(gl, gl.VERTEX_SHADER, shaderText[0]);
-        var fragmentShader = utils.createShader(gl, gl.FRAGMENT_SHADER, shaderText[1]);
-        program = utils.createProgram(gl, vertexShader, fragmentShader);
-  
-      });
-      gl.useProgram(program);
+        // initialize resource paths
+        var path = window.location.pathname;
+        var page = path.split("/").pop();
+        baseDir = window.location.href.replace(page, '');
+        shaderDir = baseDir + "Shaders/";
+        modelsDir = baseDir + "Models/";
+    
+        // load vertex and fragment shaders from file
+        await utils.loadFiles([shaderDir + 'vs.glsl', shaderDir + 'fs.glsl'], function (shaderText) {
+            var vertexShader = utils.createShader(gl, gl.VERTEX_SHADER, shaderText[0]);
+            var fragmentShader = utils.createShader(gl, gl.FRAGMENT_SHADER, shaderText[1]);
+            program = utils.createProgram(gl, vertexShader, fragmentShader);
+    
+        });
+        gl.useProgram(program);
     }
   
     // load meshes from obj files
     async function loadMeshes() {
-      ballMesh = await utils.loadMesh(modelsDir + "Ball.obj");
-      cubeMesh = await utils.loadMesh(modelsDir + "Cube.obj");
-  
-      allMeshes = [
-        ballMesh, 
-        cubeMesh // todo add other objects
+        ballMesh = await utils.loadMesh(modelsDir + "Ball.obj");
+        cubeMesh = await utils.loadMesh(modelsDir + "Cube.obj");
+    
+        allMeshes = [
+            ballMesh, 
+            cubeMesh // todo add other objects
         ];
     }
   } 
-
 
 window.onload = init;
