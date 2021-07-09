@@ -21,10 +21,10 @@ var utils = {
 		} else {
 			console.log(gl.getShaderInfoLog(shader));  // eslint-disable-line
 			if (type == gl.VERTEX_SHADER) {
-				alert("ERROR IN VERTEX SHADER : " + gl.getShaderInfoLog(vertexShader));
+				alert("ERROR IN VERTEX SHADER : " + gl.getShaderInfoLog(shader));
 			}
 			if (type == gl.FRAGMENT_SHADER) {
-				alert("ERROR IN FRAGMENT SHADER : " + gl.getShaderInfoLog(vertexShader));
+				alert("ERROR IN FRAGMENT SHADER : " + gl.getShaderInfoLog(shader));
 			}
 			gl.deleteShader(shader);
 			throw "could not compile shader:" + gl.getShaderInfoLog(shader);

@@ -7,10 +7,10 @@ var modelsDir;
 
 //camera variables
 var cx = 0;
-var cy = 13.5;
-var cz = -9.5;
-var elev = -30;
-var ang = 180;
+var cy = 20;
+var cz = 0;
+var elev = -90;
+var ang = 0;
 
 // meshes
 var ballMesh;
@@ -49,7 +49,7 @@ function main()
 
 
     // directional light 
-    var directionalLightDirection = [-1.0, 0.0, -0.5];
+    var directionalLightDirection = [0.0, 1.0, 0.0];
     var directionalLightColor = [1.0, 1.0, 1.0];
     // define ambient light color and material
     var ambientLight = [0.15, 0.9, 0.8];
@@ -101,7 +101,17 @@ function main()
 
 
     // perspective matrix
-    var PMatrix = utils.MakePerspective(90, gl.canvas.width / gl.canvas.height, 0.1, 100.0);
+    //var PMatrix = utils.MakePerspective(10, gl.canvas.width / gl.canvas.height, 0.1, 100.0);
+
+    var Port = 	[1/50,		0.0,		0.0,		0.0,
+        0.0,		16/(9*50),		0.0,		0.0,
+        0.0,		0.0,		-2/(101-1),		-(101+1)/(101-1),
+        0.0,		0.0,		0.0,		1.0];
+    var PMatrix = Port;
+
+
+
+
     // view matrix
     var VMatrix = utils.MakeView(cx, cy, cz, elev, ang);
 
@@ -152,11 +162,11 @@ function main()
 
         // update world matrices for moving objects 
         currentMatricesList[0] = getBallMatrix(ball.position.x, ball.position.y);
-        currentMatricesList[1] = getPaddleMatrix(paddle.position.x);
+        currentMatricesList[1] = getPaddleMatrix(paddle.position.x, paddle.position.y);
         // walls not touched
         for (let i = 5; i < currentMatricesList.length; i++) 
         {
-            currentMatricesList[i] = getBrickMatrix(i, brickList[i].disabled);
+            currentMatricesList[i] = getBrickMatrix(i, brickList[i-5].disabled);
         }
 
         // transform light direction into camera space

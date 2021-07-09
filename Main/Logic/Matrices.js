@@ -4,7 +4,7 @@ var hideMatrix = utils.MakeWorld(0,0,0,0,0,0,0);
 var ballMatrix = utils.MakeWorld(0,0,0,0,0,0,1);
 
 // paddle matrix
-var paddleMatrix = utils.MakeWorld(0,-10,0,0,0,0,1);
+var paddleMatrix = utils.MakeWorld(0,0,0,0,0,0,1);
 
 // walls matrices
 var wallMatrixR = utils.MakeWorld(-60,5,0,0,0,0,1);
@@ -67,7 +67,7 @@ function getBrickMatrix(matrixListIndex, disabled)
     }
 }
 
-function getPaddleMatrix(paddleX)
+function getPaddleMatrix(paddleX, paddleY)
 {
-    return utils.MakeWorld(paddleX, 0,0,0,0,0,1);
+    return utils.MakeWorld(paddleX, 0,paddleY,0,0,0,1);
 }

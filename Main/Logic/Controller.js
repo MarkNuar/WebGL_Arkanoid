@@ -31,7 +31,7 @@ var wallList = [
 ]
 
 // create paddle
-var paddle = new Paddle(new Vec2(0,-10), new Vec2(10,5));
+var paddle = new Paddle(new Vec2(0,10), new Vec2(10,5));
 
 
 // function to update the game state
