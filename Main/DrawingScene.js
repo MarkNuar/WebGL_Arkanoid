@@ -3,14 +3,14 @@ var program;
 var gl;
 var baseDir;
 var shaderDir;
+var modelsDir;
 
 //camera variables
 var cx = 0;
 var cy = 13.5;
-var cz = - 9.5;
-var elev = - 30;
+var cz = -9.5;
+var elev = -30;
 var ang = 180;
-
 
 // meshes
 var ballMesh;
@@ -23,6 +23,8 @@ var brickMesh1;
 var brickMesh2;
 var brickMesh3;
 var brickMesh4;
+// meshes list
+var meshes;
 
 // todo add other meshes
 
@@ -31,6 +33,9 @@ var brickMesh4;
 var score = 0;
 var currentScore = 0;
 var done = false;
+
+// texture variable
+var texture;
 
 //global variables
 // todo add here global variables if needed
@@ -42,53 +47,68 @@ function main()
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     gl.enable(gl.DEPTH_TEST); 
 
-    // define material color 
-    var materialDiffColor = [1.0, 1.0, 1.0, 1.0]; // this will be multipled by the texture color
 
+    // directional light 
+    var directionalLightDirection = [-1.0, 0.0, -0.5];
+    var directionalLightColor = [1.0, 1.0, 1.0];
     // define ambient light color and material
-    var ambientLight = [0.15, 0.9, 0.8, 1.0];
-    var ambientMat = [0.4, 0.2, 0.6, 1.0];
-
+    var ambientLight = [0.15, 0.9, 0.8];
+    var ambientColor = [0.4, 0.2, 0.6];
+    // define material color 
+    var materialDiffuseColor = [1.0, 1.0, 1.0]; // this will be multipled by the texture color
     //define specular component of color
-    var specularColor = [1.0, 1.0, 1.0, 1.0];
-    var specShine = 10.0;
+    var specularColor = [1.0, 1.0, 1.0];
+    var specularShine = 10.0;
+    // get texture, send in buffer
+    texture = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    var image = new Image();
+    image.src = baseDir + "Textures/textures.png";
+    image.onload = function () {
+        gl.bindTexture(gl.TEXTURE_2D, texture);
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+        gl.generateMipmap(gl.TEXTURE_2D);
+    };
 
+
+    // vertex shader
     // get attributes and normal location
     var positionAttributeLocation = gl.getAttribLocation(program, "inPosition");
     var normalAttributeLocation = gl.getAttribLocation(program, "inNormal");
     var uvAttributeLocation = gl.getAttribLocation(program, "in_uv");
-    // texture
-    var textureLocation = gl.getUniformLocation(program, "in_texture");
-    // matrix
-    var matrixLocation = gl.getUniformLocation(program, "matrix");
+    // corrected matrices
+    var WVPMatrixHandle = gl.getUniformLocation(program, "WVPMatrix");
+    var WVMatrixHandle = gl.getUniformLocation(program, 'WVMatrix');
+    var NMatrixHandle = gl.getUniformLocation(program, 'NMatrix');
+
+    // fragment shader
+    // directional light
+    var directionalLightDirectionHandle = gl.getUniformLocation(program, 'lightDirection');
+    var directionalLightColorHandle = gl.getUniformLocation(program, 'lightColor');
     // ambient light
-    var ambientLightColorHandle = gl.getUniformLocation(program, "ambientLightCol");
-    var ambientMaterialHandle = gl.getUniformLocation(program, "ambientMat");
+    var ambientLightHandle = gl.getUniformLocation(program, "ambientLight");
+    var ambientColorlHandle = gl.getUniformLocation(program, "ambientColor");
     // material diffuse color
-    var materialDiffColorHandle = gl.getUniformLocation(program, 'mDiffColor');
+    var materialDiffuseColorHandle = gl.getUniformLocation(program, 'diffuseColor');
     // blinn color and brightness
     var specularColorHandle = gl.getUniformLocation(program, "specularColor");
-    var shineSpecularHandle = gl.getUniformLocation(program, "specShine");
-    // directional light
-    var lightDirectionHandle = gl.getUniformLocation(program, 'lightDirection');
-    var lightColorHandle = gl.getUniformLocation(program, 'lightColor');
-    // corrected matrices
-    var normalMatrixPositionHandle = gl.getUniformLocation(program, 'nMatrix');
-    var worldViewMatrixPositionHandle = gl.getUniformLocation(program, 'worldViewMatrix');
+    var specularShineHandle = gl.getUniformLocation(program, "specularShine");
+    // texture
+    var textureHandle = gl.getUniformLocation(program, "in_texture");
 
 
     // perspective matrix
-    var perspectiveMatrix = utils.MakePerspective(90, gl.canvas.width / gl.canvas.height, 0.1, 100.0);
+    var PMatrix = utils.MakePerspective(90, gl.canvas.width / gl.canvas.height, 0.1, 100.0);
     // view matrix
-    var viewMatrix = utils.MakeView(cx, cy, cz, elev, ang);
+    var VMatrix = utils.MakeView(cx, cy, cz, elev, ang);
 
     // vertex array objects
-    var vaos = new Array(allMeshes.length);
-
-    // todo manage textures
-
+    var vaos = new Array(meshes.length);
     function addMeshToScene(i) {
-        let mesh = allMeshes[i];
+        let mesh = meshes[i];
         let vao = gl.createVertexArray();
         vaos[i] = vao;
         gl.bindVertexArray(vao);
@@ -116,15 +136,15 @@ function main()
         gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(mesh.indices), gl.STATIC_DRAW);
     }
 
-    for (let i in allMeshes)
+    for (let i in meshes)
     {
-      addMeshToScene(i);
+        addMeshToScene(i);
     }
 
     function drawScene()
     {
         // update game state, animations
-        Controller.updateGameState();
+        updateGameState();
 
         // clear the canvas
         gl.clearColor(0.00, 0.00, 0.00, 1.0);
@@ -139,10 +159,35 @@ function main()
             currentMatricesList[i] = getBrickMatrix(i, brickList[i].disabled);
         }
 
-        // directional light 
+        // transform light direction into camera space
+        var directionalLightDirectionTransformed = utils.multiplyMatrix3Vector3(utils.sub3x3from4x4(VMatrix), directionalLightDirection);
+
+        // passing uniforms to fragment shader
+        gl.uniform3fv(directionalLightDirectionHandle, directionalLightDirectionTransformed);
+        gl.uniform3fv(directionalLightColorHandle, directionalLightColor);
+        gl.uniform3fv(ambientLightHandle, ambientLight);
+        gl.uniform3fv(ambientColorlHandle, ambientColor);
+        gl.uniform3fv(specularColorHandle, specularColor);
+        gl.uniform1f(specularShineHandle, specularShine);
+        gl.uniform3fv(materialDiffuseColorHandle, materialDiffuseColor);  
         
+        // pass each object with its matrix
+        for (var i = 0; i < meshes.length; i++) {
+            var WVMatrix = utils.multiplyMatrices(VMatrix, currentMatricesList[i]);
+            var WVPMatrix = utils.multiplyMatrices(PMatrix, WVMatrix);
+            var NMatrix = utils.invertMatrix(utils.transposeMatrix(WVMatrix));
 
+            gl.uniformMatrix4fv(WVPMatrixHandle, gl.FALSE, utils.transposeMatrix(WVPMatrix));
+            gl.uniformMatrix4fv(WVMatrixHandle, gl.FALSE, utils.transposeMatrix(WVMatrix));
+            gl.uniformMatrix4fv(NMatrixHandle, gl.FALSE, utils.transposeMatrix(NMatrix));
 
+            gl.activeTexture(gl.TEXTURE0);
+            gl.bindTexture(gl.TEXTURE_2D, texture);
+            gl.uniform1i(textureHandle, 0);
+
+            gl.bindVertexArray(vaos[i]);
+            gl.drawElements(gl.TRIANGLES, meshes[i].indices.length, gl.UNSIGNED_SHORT, 0);
+        };
 
         // todo tomorrow        
         window.requestAnimationFrame(drawScene);
@@ -156,7 +201,7 @@ async function init() {
     // maybe add music
 
     setupCanvas();
-    loadShaders();
+    await loadShaders();
     await loadMeshes();
     main();
   
@@ -164,7 +209,7 @@ async function init() {
     function setupCanvas() {
         var canvas = document.getElementById("canvas");
         gl = canvas.getContext("webgl2");
-    
+
         if (!gl) {
             document.write("GL context not opened");
             return;
@@ -205,7 +250,7 @@ async function init() {
         brickMesh3 = await utils.loadMesh(modelsDir + "brick.obj");
         brickMesh4 = await utils.loadMesh(modelsDir + "brick.obj");
 
-        allMeshes = [
+        meshes = [
             ballMesh,
             paddleMesh,
             wallMeshR, 

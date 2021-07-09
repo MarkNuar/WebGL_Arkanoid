@@ -21,9 +21,9 @@ var brickList = [
 ]
 
 // create walls
-var wallR = new Wall(new Vec2(0,0), new Vec2(0,0));
-var wallL = new Wall(new Vec2(0,0), new Vec2(0,0));
-var wallU = new Wall(new Vec2(0,0), new Vec2(0,0));
+var wallR = new Wall(new Vec2(-60,5), new Vec2(0,0));
+var wallL = new Wall(new Vec2(60,5), new Vec2(0,0));
+var wallU = new Wall(new Vec2(-200,5), new Vec2(0,0));
 var wallList = [
     wallR, 
     wallL, 

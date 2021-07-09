@@ -7,9 +7,9 @@ var ballMatrix = utils.MakeWorld(0,0,0,0,0,0,1);
 var paddleMatrix = utils.MakeWorld(0,-10,0,0,0,0,1);
 
 // walls matrices
-var wallMatrixR = utils.MakeWorld(-30,5,0,0,0,0,1);
-var wallMatrixL = utils.MakeWorld(-30,5,0,0,0,0,1);
-var wallMatrixU = utils.MakeWorld(-30,5,0,0,0,0,1);
+var wallMatrixR = utils.MakeWorld(-60,5,0,0,0,0,1);
+var wallMatrixL = utils.MakeWorld(60,5,0,0,0,0,1);
+var wallMatrixU = utils.MakeWorld(-200,5,0,0,0,0,1);
 
 // bricks matrices
 var brickMatrix0 = utils.MakeWorld(-30,5,0,0,0,0,1);
