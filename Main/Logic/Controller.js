@@ -21,9 +21,9 @@ var brickList = [
 ]
 
 // create walls
-var wallR = new Wall(new Vec2(30,0), new Vec2(10,10));
-var wallL = new Wall(new Vec2(-20,0), new Vec2(10,10));
-var wallU = new Wall(new Vec2(0,-25), new Vec2(10,10));
+var wallR = new Wall(new Vec2(0,0), new Vec2(1000000,1));
+var wallL = new Wall(new Vec2(0,0), new Vec2(1,1));
+var wallU = new Wall(new Vec2(0,-25), new Vec2(1,1));
 var wallList = [
     wallR, 
     wallL, 
@@ -31,7 +31,7 @@ var wallList = [
 ]
 
 // create paddle
-var paddle = new Paddle(new Vec2(0,10), new Vec2(10,5));
+var paddle = new Paddle(new Vec2(0,25), new Vec2(10,5));
 
 
 // function to update the game state
@@ -72,17 +72,11 @@ window.addEventListener("keyup", onKeyReleased);
 function onKeyPressed(e) {
     if (e.key === "a" || e.key === "ArrowLeft") {
         //move paddle to left
-        if(!paddle.moveRight)
-        {
-            paddle.moveLeft = true;
-        }
+        paddle.moveLeft = true;
     }
     if (e.key === "d" || e.key === "ArrowRight") {
         //move paddle to right
-        if(!paddle.moveLeft)
-        {
             paddle.moveRight = true;
-        }       
     }
 }
 

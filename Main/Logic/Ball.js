@@ -51,7 +51,8 @@ class Ball
         let aabbPosition = new Vec2(otherObjectPosition.x + aabbhalfExtents.x,
                 	            otherObjectPosition.y + aabbhalfExtents.y);
 
-        let difference = ballPosition - aabbPosition;
+        let difference = new Vec2(ballPosition.x - aabbPosition.x, ballPosition.y - aabbPosition.y);
+
         let clamped = new Vec2(
             this.clamp(difference.x, -aabbhalfExtents.x, aabbhalfExtents.x),
             this.clamp(difference.y, -aabbhalfExtents.y, aabbhalfExtents.y)
@@ -63,7 +64,7 @@ class Ball
 
         if(difference.getModule() < ballRadius)
         {
-            this.handleCollision(otherObject, difference)
+            this.handleCollision(otherObject, difference);
         }
     }
 
@@ -90,7 +91,7 @@ class Ball
             let collisionDirection = this.getCollisionDirection(difference)
             if(collisionDirection === 3 || collisionDirection === 1)
             {
-                this.speed.x = -this.speed.x;
+                this.velocity.x = -this.velocity.x;
                 let penetration = this.radius - Math.abs(difference.x)
                 if(collisionDirection === 3)
                 {
@@ -103,7 +104,7 @@ class Ball
             }
             else
             {
-                this.speed.y = -this.speed.y;
+                this.velocity.y = -this.velocity.y;
                 let penetration = this.radius - Math.abs(difference.y)
                 if(collisionDirection === 0)
                 {

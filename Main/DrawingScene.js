@@ -58,7 +58,7 @@ function main()
     var materialDiffuseColor = [1.0, 1.0, 1.0]; // this will be multipled by the texture color
     //define specular component of color
     var specularColor = [1.0, 1.0, 1.0];
-    var specularShine = 10.0;
+    var specularShine = 1.0;
     // get texture, send in buffer
     texture = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, texture);
@@ -144,10 +144,6 @@ function main()
         var indexBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
         gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(mesh.indices), gl.STATIC_DRAW);
-
-        console.log("vertices "+mesh.vertices);
-        console.log("indices "+mesh.indices);
-
     }
 
     for (let i in meshes)
@@ -253,16 +249,16 @@ async function init() {
   
     // load meshes from obj files
     async function loadMeshes() {
-        ballMesh = await utils.loadMesh(modelsDir + "ball.obj");
-        paddleMesh = await utils.loadMesh(modelsDir + "paddle.obj");
-        wallMeshR = await utils.loadMesh(modelsDir + "wall.obj");
-        wallMeshL = await utils.loadMesh(modelsDir + "wall.obj");
-        wallMeshU = await utils.loadMesh(modelsDir + "wall.obj");
-        brickMesh0 = await utils.loadMesh(modelsDir + "brick.obj");
-        brickMesh1 = await utils.loadMesh(modelsDir + "brick.obj");
-        brickMesh2 = await utils.loadMesh(modelsDir + "brick.obj");
-        brickMesh3 = await utils.loadMesh(modelsDir + "brick.obj");
-        brickMesh4 = await utils.loadMesh(modelsDir + "brick.obj");
+        ballMesh = await utils.loadMesh(modelsDir + "Ball.obj");
+        paddleMesh = await utils.loadMesh(modelsDir + "Paddle.obj");
+        wallMeshR = await utils.loadMesh(modelsDir + "SideWall.obj");
+        wallMeshL = await utils.loadMesh(modelsDir + "SideWall.obj");
+        wallMeshU = await utils.loadMesh(modelsDir + "TopWall.obj");
+        brickMesh0 = await utils.loadMesh(modelsDir + "Brick.obj");
+        brickMesh1 = await utils.loadMesh(modelsDir + "Brick.obj");
+        brickMesh2 = await utils.loadMesh(modelsDir + "Brick.obj");
+        brickMesh3 = await utils.loadMesh(modelsDir + "Brick.obj");
+        brickMesh4 = await utils.loadMesh(modelsDir + "Brick.obj");
 
         meshes = [
             ballMesh,
