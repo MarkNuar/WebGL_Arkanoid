@@ -7,16 +7,16 @@ var ballMatrix = utils.MakeWorld(0,0,0,0,0,0,1);
 var paddleMatrix = utils.MakeWorld(0,0,0,0,0,0,1);
 
 // walls matrices
-var wallMatrixR = utils.MakeWorld(-60,5,0,0,0,0,1);
-var wallMatrixL = utils.MakeWorld(60,5,0,0,0,0,1);
-var wallMatrixU = utils.MakeWorld(-200,5,0,0,0,0,1);
+var wallMatrixR = utils.MakeWorld(30,0,0,0,0,0,10);
+var wallMatrixL = utils.MakeWorld(-30,0,0,0,0,0,10);
+var wallMatrixU = utils.MakeWorld(0,0,-25,0,0,0,10);
 
 // bricks matrices
-var brickMatrix0 = utils.MakeWorld(-30,5,0,0,0,0,1);
-var brickMatrix1 = utils.MakeWorld(-25,5,0,0,0,0,1);
-var brickMatrix2 = utils.MakeWorld(-20,5,0,0,0,0,1);
-var brickMatrix3 = utils.MakeWorld(-15,5,0,0,0,0,1);
-var brickMatrix4 = utils.MakeWorld(-10,5,0,0,0,0,1);
+var brickMatrix0 = utils.MakeWorld(0,0,0,0,0,0,1);
+var brickMatrix1 = utils.MakeWorld(0,0,0,0,0,0,1);
+var brickMatrix2 = utils.MakeWorld(0,0,0,0,0,0,1);
+var brickMatrix3 = utils.MakeWorld(0,0,0,0,0,0,1);
+var brickMatrix4 = utils.MakeWorld(0,0,0,0,0,0,1);
 
 // initial objects matrices for restoring game to initial state
 var initialMatricesList = [ 
@@ -50,12 +50,12 @@ var currentMatricesList = [
 
 
 
-function getBallMatrix(ballX, ballY)
+function setBallMatrix(ballX, ballY)
 {
-    return utils.MakeWorld(ballX, ballY, 0, 0, 0, 0, 1);
+    return utils.MakeWorld(ballX, 0, ballY, 0, 0, 0, 1);
 }
 
-function getBrickMatrix(matrixListIndex, disabled)
+function setBrickMatrix(matrixListIndex, disabled)
 {
     if(disabled)
     {
@@ -67,7 +67,7 @@ function getBrickMatrix(matrixListIndex, disabled)
     }
 }
 
-function getPaddleMatrix(paddleX, paddleY)
+function setPaddleMatrix(paddleX, paddleY)
 {
     return utils.MakeWorld(paddleX, 0,paddleY,0,0,0,1);
 }

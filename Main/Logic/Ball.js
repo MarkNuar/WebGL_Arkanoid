@@ -7,22 +7,33 @@ class Ball
         this.velocity = new Vec2(0,0);
         this.speed = BALL_SPEED;
         this.radius = BALL_RADIUS;
+        this.moving = false;
     }
 
     initialBallVelocity;
+    startAngleDeg;
+    startAngleRad;
     
     startMoving() 
     {
-        startAngleDeg = 90*Math.random() + 45;
-        startAngleRad = utils.degToRad(startAngleDeg);
-        this.velocity = new Vec2(Math.cos(startAngleRad),Math.sin(startAngleRad));
+        this.moving = true;
+        this.startAngleDeg = 90*Math.random() + 225;
+        this.startAngleRad = utils.degToRad(this.startAngleDeg);
+        this.velocity = new Vec2(Math.cos(this.startAngleRad),Math.sin(this.startAngleRad));
         this.initialBallVelocity = this.velocity;
         this.velocity.scale(this.speed);
     }
 
     moveBall(deltaTime)
     {
-        this.position = this.position.add(this.velocity.scale(deltaTime));
+        this.position = this.position.add(this.velocity.normalize().scale(this.speed * deltaTime));
+    }
+
+    restartBall() // todo
+    {
+        this.position = this.initialPosition;
+        this.velocity = new Vec2(0,0);
+        this.moving = false;
     }
 
     checkAndHandleCollision(otherObject)
@@ -51,7 +62,9 @@ class Ball
         difference = closest.sub(ballPosition);
 
         if(difference.getModule() < ballRadius)
-            handleCollision(otherObject, difference)
+        {
+            this.handleCollision(otherObject, difference)
+        }
     }
 
     handleCollision(otherObject, difference)
@@ -63,10 +76,10 @@ class Ball
             let percentage = distance/(otherObject.size.x/2);
 
             let strength = 2;
-            let oldvelocity = this.velocity;
+            let oldVelocity = this.velocity;
             this.velocity.x = this.initialBallVelocity.x * percentage * strength;
             this.velocity.y = -1.0 * Math.abs(this.velocity.y);
-            this.velocity = (this.velocity.normalize()).scale(oldvelocity.getModule());
+            this.velocity = (this.velocity.normalize()).scale(oldVelocity.getModule());
         }
         else // just hit a brick or wall
         {
@@ -75,11 +88,11 @@ class Ball
                 otherObject.disable();
             }
             let collisionDirection = this.getCollisionDirection(difference)
-            if(collisionDirection == 3 || collisionDirection == 1)
+            if(collisionDirection === 3 || collisionDirection === 1)
             {
                 this.speed.x = -this.speed.x;
                 let penetration = this.radius - Math.abs(difference.x)
-                if(collisionDirection == 3)
+                if(collisionDirection === 3)
                 {
                     this.position.x += penetration;
                 }
@@ -92,7 +105,7 @@ class Ball
             {
                 this.speed.y = -this.speed.y;
                 let penetration = this.radius - Math.abs(difference.y)
-                if(collisionDirection == 0)
+                if(collisionDirection === 0)
                 {
                     this.position.y -= penetration;
                 }

@@ -45,7 +45,7 @@ function main()
     // clear the canvas
     gl.clearColor(0.00, 0.00, 0.00, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-    gl.enable(gl.DEPTH_TEST); 
+    gl.enable(gl.DEPTH_TEST);
 
 
     // directional light 
@@ -144,6 +144,10 @@ function main()
         var indexBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
         gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(mesh.indices), gl.STATIC_DRAW);
+
+        console.log("vertices "+mesh.vertices);
+        console.log("indices "+mesh.indices);
+
     }
 
     for (let i in meshes)
@@ -161,12 +165,12 @@ function main()
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
         // update world matrices for moving objects 
-        currentMatricesList[0] = getBallMatrix(ball.position.x, ball.position.y);
-        currentMatricesList[1] = getPaddleMatrix(paddle.position.x, paddle.position.y);
+        currentMatricesList[0] = setBallMatrix(ball.position.x, ball.position.y);
+        currentMatricesList[1] = setPaddleMatrix(paddle.position.x, paddle.position.y);
         // walls not touched
         for (let i = 5; i < currentMatricesList.length; i++) 
         {
-            currentMatricesList[i] = getBrickMatrix(i, brickList[i-5].disabled);
+            currentMatricesList[i] = setBrickMatrix(i, brickList[i-5].disabled);
         }
 
         // transform light direction into camera space

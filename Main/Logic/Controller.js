@@ -21,9 +21,9 @@ var brickList = [
 ]
 
 // create walls
-var wallR = new Wall(new Vec2(-60,5), new Vec2(0,0));
-var wallL = new Wall(new Vec2(60,5), new Vec2(0,0));
-var wallU = new Wall(new Vec2(-200,5), new Vec2(0,0));
+var wallR = new Wall(new Vec2(30,0), new Vec2(10,10));
+var wallL = new Wall(new Vec2(-20,0), new Vec2(10,10));
+var wallU = new Wall(new Vec2(0,-25), new Vec2(10,10));
 var wallList = [
     wallR, 
     wallL, 
@@ -42,17 +42,25 @@ function updateGameState()
     deltaTime = currentTime - lastUpdateTime;
     lastUpdateTime = currentTime;
 
-    ball.moveBall(deltaTime);
-    paddle.movePaddle(deltaTime);
+    if(!ball.moving)
+    {
+        ball.startMoving();
+    }
+    else
+    {
+        ball.moveBall(deltaTime);
 
-    // loop over all objects in level and check collision with them 
-    brickList.forEach(brick => {
-        ball.checkAndHandleCollision(brick);
-    });
-    wallList.forEach(wall => {
-        ball.checkAndHandleCollision(wall);
-    });
-    ball.checkAndHandleCollision(paddle);
+        // loop over all objects in level and check collision with them
+        brickList.forEach(brick => {
+            ball.checkAndHandleCollision(brick);
+        });
+        wallList.forEach(wall => {
+            ball.checkAndHandleCollision(wall);
+        });
+        ball.checkAndHandleCollision(paddle);
+    }
+
+    paddle.movePaddle(deltaTime);
 
     // win condition (?)
 }
