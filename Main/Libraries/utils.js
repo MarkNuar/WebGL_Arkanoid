@@ -658,5 +658,19 @@ var utils = {
 		perspective[15] = 0.0;
 
 		return perspective;
+	},
+
+	MakeProjection: function(w, a, n, f)
+	{
+		let perspective = this.identityMatrix();
+
+		perspective[0] = 1 / w;
+		perspective[5] = a / w;
+		perspective[10] = -2 / (f - n);
+		perspective[11] = - (f + n)/(f - n);
+		perspective[15] = 1;
+
+		return perspective;
+
 	}
 }

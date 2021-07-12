@@ -7,8 +7,8 @@ let modelsDir;
 
 //camera variables
 let cx = 0;
-let cy = 60;
-let cz = -3;
+let cy = 25;
+let cz = 0;
 let elev = -90;
 let ang = 0;
 
@@ -43,26 +43,29 @@ let texture;
 function main()
 {
     // clear the canvas
-    gl.clearColor(0.00, 0.00, 0.00, 1.0);
+    gl.clearColor(1.00, 1.00, 1.00, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     gl.enable(gl.DEPTH_TEST);
 
+    // gl.enable(gl.CULL_FACE);
+    // gl.cullFace(gl.BACK);
+
 
     // directional light 
-    var directionalLightDirection = [0.0, -1.0, -1.0];
-    var directionalLightColor = [1.0, 1.0, 1.0];
+    let directionalLightDirection = [0.0, -1.0, -1.0];
+    let directionalLightColor = [1.0, 1.0, 1.0];
     // define ambient light and color
-    var ambientLightColor = [1.0, 1.0, 1.0];
-    var ambientColor = [0.5, 0.5, 0.5];
+    let ambientLightColor = [1.0, 1.0, 1.0];
+    let ambientColor = [0.5, 0.5, 0.5];
     // define material color 
-    var materialDiffuseColor = [1.0, 1.0, 1.0]; // this will be multipled by the texture color
+    let materialDiffuseColor = [1.0, 1.0, 1.0]; // this will be multiplied by the texture color
     //define specular component of color
-    var specularColor = [1.0, 1.0, 1.0];
-    var specularShine = 1.0;
+    let specularColor = [1.0, 1.0, 1.0];
+    let specularShine = 1.0;
     // get texture, send in buffer
     texture = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, texture);
-    var image = new Image();
+    let image = new Image();
     image.src = baseDir + "Textures/textures.png";
     image.onload = function () {
         gl.bindTexture(gl.TEXTURE_2D, texture);
@@ -76,42 +79,40 @@ function main()
 
     // vertex shader
     // get attributes and normal location
-    var positionAttributeLocation = gl.getAttribLocation(program, "inPosition");
-    var normalAttributeLocation = gl.getAttribLocation(program, "inNormal");
-    var uvAttributeLocation = gl.getAttribLocation(program, "in_uv");
+    let positionAttributeLocation = gl.getAttribLocation(program, "inPosition");
+    let normalAttributeLocation = gl.getAttribLocation(program, "inNormal");
+    let uvAttributeLocation = gl.getAttribLocation(program, "in_uv");
     // corrected matrices
-    var WVPMatrixHandle = gl.getUniformLocation(program, "WVPMatrix");
-    var WVMatrixHandle = gl.getUniformLocation(program, 'WVMatrix');
-    var NMatrixHandle = gl.getUniformLocation(program, 'NMatrix');
+    let WVPMatrixHandle = gl.getUniformLocation(program, "WVPMatrix");
+    let WVMatrixHandle = gl.getUniformLocation(program, 'WVMatrix');
+    let NMatrixHandle = gl.getUniformLocation(program, 'NMatrix');
 
     // fragment shader
     // directional light
-    var directionalLightDirectionHandle = gl.getUniformLocation(program, 'lightDirection');
-    var directionalLightColorHandle = gl.getUniformLocation(program, 'lightColor');
+    let directionalLightDirectionHandle = gl.getUniformLocation(program, 'lightDirection');
+    let directionalLightColorHandle = gl.getUniformLocation(program, 'lightColor');
     // ambient light
-    var ambientLightColorHandle = gl.getUniformLocation(program, "ambientLight");
-    var ambientColorlHandle = gl.getUniformLocation(program, "ambientColor");
+    let ambientLightColorHandle = gl.getUniformLocation(program, "ambientLight");
+    let ambientColorHandle = gl.getUniformLocation(program, "ambientColor");
     // material diffuse color
-    var materialDiffuseColorHandle = gl.getUniformLocation(program, 'diffuseColor');
-    // blinn color and brightness
-    var specularColorHandle = gl.getUniformLocation(program, "specularColor");
-    var specularShineHandle = gl.getUniformLocation(program, "specularShine");
+    let materialDiffuseColorHandle = gl.getUniformLocation(program, 'diffuseColor');
+    // Blinn color and brightness
+    let specularColorHandle = gl.getUniformLocation(program, "specularColor");
+    let specularShineHandle = gl.getUniformLocation(program, "specularShine");
     // texture
-    var textureHandle = gl.getUniformLocation(program, "in_texture");
+    let textureHandle = gl.getUniformLocation(program, "in_texture");
 
 
     // perspective matrix
-    //var PMatrix = utils.MakePerspective(10, gl.canvas.width / gl.canvas.height, 0.1, 100.0);
-
-
-    var PMatrix = utils.MakePerspective(45, gl.canvas.width / gl.canvas.height, 1, 100);
+    //let PMatrix = utils.MakeProjection(gl.canvas.width/45, gl.canvas.width / gl.canvas.height, 1, 100);
+    let PMatrix = utils.MakePerspective(90, gl.canvas.width / gl.canvas.height, 1, 100);
 
 
     // view matrix
-    var VMatrix = utils.MakeView(cx, cy, cz, elev, ang);
+    let VMatrix = utils.MakeView(cx, cy, cz, elev, ang);
 
     // vertex array objects
-    var vaos = new Array(meshes.length);
+    let vaos = new Array(meshes.length);
     // draw objects
     for (let i = 0; i < meshes.length; i++)
     {
@@ -129,7 +130,7 @@ function main()
 
     function arrayBuffer(elements, size, attributeLocation)
     {
-        const buffer = gl.createBuffer();
+        let buffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(elements), gl.STATIC_DRAW);
         gl.enableVertexAttribArray(attributeLocation);
@@ -138,33 +139,31 @@ function main()
 
     function indexBuffer(elements)
     {
-        const buffer = gl.createBuffer();
+        let buffer = gl.createBuffer();
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer);
         gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(elements), gl.STATIC_DRAW);
     }
 
     function drawScene()
     {
-        // update game state, animations
-        updateGameState();
-
         // clear the canvas
-        gl.clearColor(0.00, 0.00, 0.00, 1.0);
+        gl.clearColor(0.20, 0.20, 0.70, 1.0); // sets wallpaper color
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
+        // update game state, animations
+        updateGameState();
 
         // update world matrices for moving objects
         updateObjectsMatrices();
 
-
         // transform light direction into camera space
-        var directionalLightDirectionTransformed = utils.multiplyMatrix3Vector3(utils.sub3x3from4x4(VMatrix), directionalLightDirection);
+        let directionalLightDirectionTransformed = utils.multiplyMatrix3Vector3(utils.sub3x3from4x4(VMatrix), directionalLightDirection);
 
         // passing uniforms to fragment shader
         gl.uniform3fv(directionalLightDirectionHandle, directionalLightDirectionTransformed);
         gl.uniform3fv(directionalLightColorHandle, directionalLightColor);
         gl.uniform3fv(ambientLightColorHandle, ambientLightColor);
-        gl.uniform3fv(ambientColorlHandle, ambientColor);
+        gl.uniform3fv(ambientColorHandle, ambientColor);
         gl.uniform3fv(specularColorHandle, specularColor);
         gl.uniform1f(specularShineHandle, specularShine);
         gl.uniform3fv(materialDiffuseColorHandle, materialDiffuseColor);  
@@ -207,7 +206,7 @@ async function init() {
   
     // prepare canvas and body styles
     function setupCanvas() {
-        var canvas = document.getElementById("canvas");
+        let canvas = document.getElementById("canvas");
         gl = canvas.getContext("webgl2");
 
         if (!gl) {
@@ -221,16 +220,16 @@ async function init() {
     //load shaders
     async function loadShaders() {
         // initialize resource paths
-        var path = window.location.pathname;
-        var page = path.split("/").pop();
+        let path = window.location.pathname;
+        let page = path.split("/").pop();
         baseDir = window.location.href.replace(page, '');
         shaderDir = baseDir + "Shaders/";
         modelsDir = baseDir + "Models/";
     
         // load vertex and fragment shaders from file
         await utils.loadFiles([shaderDir + 'vs.glsl', shaderDir + 'fs.glsl'], function (shaderText) {
-            var vertexShader = utils.createShader(gl, gl.VERTEX_SHADER, shaderText[0]);
-            var fragmentShader = utils.createShader(gl, gl.FRAGMENT_SHADER, shaderText[1]);
+            let vertexShader = utils.createShader(gl, gl.VERTEX_SHADER, shaderText[0]);
+            let fragmentShader = utils.createShader(gl, gl.FRAGMENT_SHADER, shaderText[1]);
             program = utils.createProgram(gl, vertexShader, fragmentShader);
     
         });

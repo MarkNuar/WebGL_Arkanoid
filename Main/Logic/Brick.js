@@ -14,6 +14,7 @@ class Brick
     disable()
     {
         this.disabled = true;
+        this.position = new Vec2(0,0);
         this.scale = new Vec2(0,0);
         this.hasChanged = true;
     }

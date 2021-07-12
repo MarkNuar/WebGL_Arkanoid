@@ -65,7 +65,7 @@ function updateObjectsMatrices()
                 0, // always zero for this project
                 0, // always zero for this project
                 currentObject.scale.x,
-                0, // always zero for this project
+                1, // always one for this project
                 currentObject.scale.y
             );
             currentObject.hasChanged = false;
@@ -87,7 +87,7 @@ function initializeObjectsMatrices()
             0, // always zero for this project
             0, // always zero for this project
             currentObject.scale.x,
-            0, // always zero for this project
+            1, // always one for this project
             currentObject.scale.y
         );
         initialMatricesList[i] = utils.createGenericWorldMatrix(
@@ -98,7 +98,7 @@ function initializeObjectsMatrices()
             0, // always zero for this project
             0, // always zero for this project
             currentObject.scale.x,
-            0, // always zero for this project
+            1, // always one for this project
             currentObject.scale.y
         );
         currentObject.hasChanged = false;

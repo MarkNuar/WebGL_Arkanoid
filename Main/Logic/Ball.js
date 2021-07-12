@@ -66,12 +66,6 @@ class Ball
         if(difference.getModule() < ballRadius)
         {
             this.handleCollision(otherObject, difference);
-            if(otherObject.isPaddle)
-            {
-                console.log("Paddle");
-                console.log("Position "+aabbPosition.x +" "+aabbPosition.y);
-                console.log("Extents "+aabbhalfExtents.x + " " + aabbhalfExtents.y);
-            }
         }
     }
 

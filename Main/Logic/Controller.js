@@ -90,8 +90,6 @@ function updateGameState()
     }
     else
     {
-        ball.moveBall(deltaTime);
-
         // loop over all objects in level and check collision with them
         bricksList.forEach(brick => {
             ball.checkAndHandleCollision(brick);
@@ -100,6 +98,8 @@ function updateGameState()
             ball.checkAndHandleCollision(wall);
         });
         ball.checkAndHandleCollision(paddle);
+
+        ball.moveBall(deltaTime);
     }
 
     paddle.movePaddle(deltaTime);
