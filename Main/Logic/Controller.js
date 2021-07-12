@@ -33,7 +33,7 @@ function initializeObjects()
      * y goes from up to down
      */
 
-    ball = new Ball(new Vec2(0, 8), new Vec2(0.5, 0.5));
+    ball = new Ball(new Vec2(0, 8), new Vec2(0.6, 0.6));
     paddle = new Paddle(new Vec2(0, 15), new Vec2(2, 0.5));
 
     wallR = new Wall(new Vec2(-10, 0), new Vec2(0.5, 15));

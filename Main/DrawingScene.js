@@ -7,8 +7,8 @@ let modelsDir;
 
 //camera variables
 let cx = 0;
-let cy = 20;
-let cz = 0;
+let cy = 60;
+let cz = -3;
 let elev = -90;
 let ang = 0;
 
@@ -49,11 +49,11 @@ function main()
 
 
     // directional light 
-    var directionalLightDirection = [0.0, -10.0, 0.0];
+    var directionalLightDirection = [0.0, -1.0, -1.0];
     var directionalLightColor = [1.0, 1.0, 1.0];
     // define ambient light and color
-    var ambientLight = [0.15, 0.9, 0.8];
-    var ambientColor = [0.4, 0.2, 0.6];
+    var ambientLightColor = [1.0, 1.0, 1.0];
+    var ambientColor = [0.5, 0.5, 0.5];
     // define material color 
     var materialDiffuseColor = [1.0, 1.0, 1.0]; // this will be multipled by the texture color
     //define specular component of color
@@ -89,7 +89,7 @@ function main()
     var directionalLightDirectionHandle = gl.getUniformLocation(program, 'lightDirection');
     var directionalLightColorHandle = gl.getUniformLocation(program, 'lightColor');
     // ambient light
-    var ambientLightHandle = gl.getUniformLocation(program, "ambientLight");
+    var ambientLightColorHandle = gl.getUniformLocation(program, "ambientLight");
     var ambientColorlHandle = gl.getUniformLocation(program, "ambientColor");
     // material diffuse color
     var materialDiffuseColorHandle = gl.getUniformLocation(program, 'diffuseColor');
@@ -103,10 +103,8 @@ function main()
     // perspective matrix
     //var PMatrix = utils.MakePerspective(10, gl.canvas.width / gl.canvas.height, 0.1, 100.0);
 
-    var PMatrix = [1 / 50, 0.0, 0.0, 0.0,
-        0.0, 16 / (9 * 50), 0.0, 0.0,
-        0.0, 0.0, -2 / (101 - 1), -(101 + 1) / (101 - 1),
-        0.0, 0.0, 0.0, 1.0];
+
+    var PMatrix = utils.MakePerspective(45, gl.canvas.width / gl.canvas.height, 1, 100);
 
 
     // view matrix
@@ -165,7 +163,7 @@ function main()
         // passing uniforms to fragment shader
         gl.uniform3fv(directionalLightDirectionHandle, directionalLightDirectionTransformed);
         gl.uniform3fv(directionalLightColorHandle, directionalLightColor);
-        gl.uniform3fv(ambientLightHandle, ambientLight);
+        gl.uniform3fv(ambientLightColorHandle, ambientLightColor);
         gl.uniform3fv(ambientColorlHandle, ambientColor);
         gl.uniform3fv(specularColorHandle, specularColor);
         gl.uniform1f(specularShineHandle, specularShine);
