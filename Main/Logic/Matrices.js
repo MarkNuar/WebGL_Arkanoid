@@ -103,6 +103,5 @@ function initializeObjectsMatrices()
         );
         currentObject.hasChanged = false;
     }
-    console.log(currentMatricesList);
 }
 

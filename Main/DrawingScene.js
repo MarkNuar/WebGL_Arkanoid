@@ -243,9 +243,7 @@ async function init() {
     async function loadMeshes() {
         ballMesh = await utils.loadMesh(modelsDir + "Ball.obj");
         paddleMesh = await utils.loadMesh(modelsDir + "Paddle.obj");
-        console.log(paddleMesh.vertices)
         wallMeshR = await utils.loadMesh(modelsDir + "Wall.obj");
-        console.log(wallMeshR.vertices);
         wallMeshL = await utils.loadMesh(modelsDir + "Wall.obj");
         wallMeshU = await utils.loadMesh(modelsDir + "Wall.obj");
         brickMesh0 = await utils.loadMesh(modelsDir + "Brick.obj");
