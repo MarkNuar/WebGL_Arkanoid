@@ -1,12 +1,14 @@
 class Ball 
 {
-    constructor(position)
+    constructor(position, scale)
     {
-        this.initialPosition = position;
         this.position = position;
+        this.scale = scale;
+        this.hasChanged = false;
+
         this.velocity = new Vec2(0,0);
         this.speed = BALL_SPEED;
-        this.radius = BALL_RADIUS;
+        this.radius = scale.x;
         this.moving = false;
     }
 
@@ -27,11 +29,12 @@ class Ball
     moveBall(deltaTime)
     {
         this.position = this.position.add(this.velocity.normalize().scale(this.speed * deltaTime));
+        this.hasChanged = true;
     }
 
     restartBall() // todo
     {
-        this.position = this.initialPosition;
+        //this.position = this.initialPosition;
         this.velocity = new Vec2(0,0);
         this.moving = false;
     }
@@ -46,10 +49,8 @@ class Ball
         let ballPosition = this.position;
         let ballRadius = this.radius;
 
-        let otherObjectPosition = otherObject.position;
-        let aabbhalfExtents = new Vec2(otherObject.size.x/2, otherObject.size.y/2);
-        let aabbPosition = new Vec2(otherObjectPosition.x + aabbhalfExtents.x,
-                	            otherObjectPosition.y + aabbhalfExtents.y);
+        let aabbhalfExtents = new Vec2(otherObject.scale.x, otherObject.scale.y);
+        let aabbPosition = otherObject.position;
 
         let difference = new Vec2(ballPosition.x - aabbPosition.x, ballPosition.y - aabbPosition.y);
 
@@ -65,6 +66,12 @@ class Ball
         if(difference.getModule() < ballRadius)
         {
             this.handleCollision(otherObject, difference);
+            if(otherObject.isPaddle)
+            {
+                console.log("Paddle");
+                console.log("Position "+aabbPosition.x +" "+aabbPosition.y);
+                console.log("Extents "+aabbhalfExtents.x + " " + aabbhalfExtents.y);
+            }
         }
     }
 
@@ -72,9 +79,9 @@ class Ball
     {
         if(otherObject.isPaddle) // just hit the player
         {
-            let paddleCenter = otherObject.position.x + otherObject.size.x/2;
+            let paddleCenter = otherObject.position.x + otherObject.scale.x;
             let distance = (this.position.x + this.radius) - paddleCenter;
-            let percentage = distance/(otherObject.size.x/2);
+            let percentage = distance/(otherObject.scale.x);
 
             let strength = 2;
             let oldVelocity = this.velocity;

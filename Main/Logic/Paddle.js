@@ -1,12 +1,14 @@
 class Paddle 
 {
-    constructor(position, size)
+    constructor(position, scale)
     {
         this.position = position;
-        this.size = size;
+        this.scale = scale;
+        this.hasChanged = false;
+
         this.canBeDisabled = false;
         this.disabled = false;
-        this.isPaddle = false;
+        this.isPaddle = true;
         this.speed = PADDLE_SPEED;
     }
 
@@ -17,10 +19,12 @@ class Paddle
     {
         if(this.moveLeft)
         {
+            this.hasChanged = true;
             this.position.x -= this.speed * deltaTime;
         }
         else if(this.moveRight)
         {
+            this.hasChanged = true;
             this.position.x += this.speed * deltaTime;
         }
     }

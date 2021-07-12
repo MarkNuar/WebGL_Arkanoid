@@ -1,38 +1,80 @@
 // time management
-var lastUpdateTime = (new Date).getTime();
-var currentTime; 
-var deltaTime;
+let lastUpdateTime = (new Date).getTime();
+let currentTime;
+let deltaTime;
 
-// create ball 
-var ball = new Ball(new Vec2(4.6, 2));
+// ball
+let ball = null;
 
-// create bricks
-var brick0 = new Brick(new Vec2(-30,5), new Vec2(10,5));
-var brick1 = new Brick(new Vec2(-25,5), new Vec2(10,5));
-var brick2 = new Brick(new Vec2(-20,5), new Vec2(10,5));
-var brick3 = new Brick(new Vec2(-15,5), new Vec2(10,5));
-var brick4 = new Brick(new Vec2(-10,5), new Vec2(10,5));
-var brickList = [
-    brick0,
-    brick1, 
-    brick2, 
-    brick3,
-    brick4
-]
+// paddle
+let paddle = null;
 
-// create walls
-var wallR = new Wall(new Vec2(0,0), new Vec2(1000000,1));
-var wallL = new Wall(new Vec2(0,0), new Vec2(1,1));
-var wallU = new Wall(new Vec2(0,-25), new Vec2(1,1));
-var wallList = [
-    wallR, 
-    wallL, 
-    wallU
-]
+// bricks
+let brick0 = null;
+let brick1 = null;
+let brick2 = null;
+let brick3 = null;
+let brick4 = null;
+let bricksList = null;
 
-// create paddle
-var paddle = new Paddle(new Vec2(0,25), new Vec2(10,5));
+// walls
+let wallR = null;
+let wallL = null;
+let wallU = null;
+let wallsList = null
 
+// objects list
+let objectsList = null;
+
+function initializeObjects()
+{
+    /**
+     * x goes from right to left
+     * y goes from up to down
+     */
+
+    ball = new Ball(new Vec2(0, 8), new Vec2(0.5, 0.5));
+    paddle = new Paddle(new Vec2(0, 15), new Vec2(2, 0.5));
+
+    wallR = new Wall(new Vec2(-10, 0), new Vec2(0.5, 15));
+    wallL = new Wall(new Vec2(10, 0), new Vec2(0.5, 15));
+    wallU = new Wall(new Vec2(0, -15), new Vec2(11, 0.5));
+
+    brick0 = new Brick(new Vec2(0,0), new Vec2(1,1));
+    brick1 = new Brick(new Vec2(0,0), new Vec2(0,0));
+
+    brick2 = new Brick(new Vec2(0,0), new Vec2(0,0));
+    brick3 = new Brick(new Vec2(0,0), new Vec2(0,0));
+    brick4 = new Brick(new Vec2(0,0), new Vec2(0,0));
+
+    objectsList = [
+        ball,
+        paddle,
+        wallR,
+        wallL,
+        wallU,
+        brick0,
+        brick1,
+        brick2,
+        brick3,
+        brick4
+        // add other bricks ...
+    ];
+
+    wallsList = [
+        wallR,
+        wallL,
+        wallU
+    ];
+
+    bricksList = [
+        brick0,
+        brick1,
+        brick2,
+        brick3,
+        brick4
+    ];
+}
 
 // function to update the game state
 function updateGameState()
@@ -51,10 +93,10 @@ function updateGameState()
         ball.moveBall(deltaTime);
 
         // loop over all objects in level and check collision with them
-        brickList.forEach(brick => {
+        bricksList.forEach(brick => {
             ball.checkAndHandleCollision(brick);
         });
-        wallList.forEach(wall => {
+        wallsList.forEach(wall => {
             ball.checkAndHandleCollision(wall);
         });
         ball.checkAndHandleCollision(paddle);

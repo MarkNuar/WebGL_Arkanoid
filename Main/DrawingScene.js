@@ -1,41 +1,41 @@
 //relevant paths to resources
-var program;
-var gl;
-var baseDir;
-var shaderDir;
-var modelsDir;
+let program;
+let gl;
+let baseDir;
+let shaderDir;
+let modelsDir;
 
 //camera variables
-var cx = 0;
-var cy = 20;
-var cz = 0;
-var elev = -90;
-var ang = 0;
+let cx = 0;
+let cy = 20;
+let cz = 0;
+let elev = -90;
+let ang = 0;
 
 // meshes
-var ballMesh;
-var paddleMesh;
-var wallMeshR;
-var wallMeshL;
-var wallMeshU;
-var brickMesh0;
-var brickMesh1;
-var brickMesh2;
-var brickMesh3;
-var brickMesh4;
+let ballMesh;
+let paddleMesh;
+let wallMeshR;
+let wallMeshL;
+let wallMeshU;
+let brickMesh0;
+let brickMesh1;
+let brickMesh2;
+let brickMesh3;
+let brickMesh4;
 // meshes list
-var meshes;
+let meshes;
 
 // todo add other meshes
 
 
 //score variables
-var score = 0;
-var currentScore = 0;
-var done = false;
+let score = 0;
+let currentScore = 0;
+let done = false;
 
 // texture variable
-var texture;
+let texture;
 
 //global variables
 // todo add here global variables if needed
@@ -49,9 +49,9 @@ function main()
 
 
     // directional light 
-    var directionalLightDirection = [0.0, 1.0, 0.0];
+    var directionalLightDirection = [0.0, -10.0, 0.0];
     var directionalLightColor = [1.0, 1.0, 1.0];
-    // define ambient light color and material
+    // define ambient light and color
     var ambientLight = [0.15, 0.9, 0.8];
     var ambientColor = [0.4, 0.2, 0.6];
     // define material color 
@@ -103,13 +103,10 @@ function main()
     // perspective matrix
     //var PMatrix = utils.MakePerspective(10, gl.canvas.width / gl.canvas.height, 0.1, 100.0);
 
-    var Port = 	[1/50,		0.0,		0.0,		0.0,
-        0.0,		16/(9*50),		0.0,		0.0,
-        0.0,		0.0,		-2/(101-1),		-(101+1)/(101-1),
-        0.0,		0.0,		0.0,		1.0];
-    var PMatrix = Port;
-
-
+    var PMatrix = [1 / 50, 0.0, 0.0, 0.0,
+        0.0, 16 / (9 * 50), 0.0, 0.0,
+        0.0, 0.0, -2 / (101 - 1), -(101 + 1) / (101 - 1),
+        0.0, 0.0, 0.0, 1.0];
 
 
     // view matrix
@@ -117,38 +114,35 @@ function main()
 
     // vertex array objects
     var vaos = new Array(meshes.length);
-    function addMeshToScene(i) {
+    // draw objects
+    for (let i = 0; i < meshes.length; i++)
+    {
         let mesh = meshes[i];
         let vao = gl.createVertexArray();
         vaos[i] = vao;
         gl.bindVertexArray(vao);
-    
-        var positionBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(mesh.vertices), gl.STATIC_DRAW);
-        gl.enableVertexAttribArray(positionAttributeLocation);
-        gl.vertexAttribPointer(positionAttributeLocation, 3, gl.FLOAT, false, 0, 0);
-    
-        var uvBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, uvBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(mesh.textures), gl.STATIC_DRAW);
-        gl.enableVertexAttribArray(uvAttributeLocation);
-        gl.vertexAttribPointer(uvAttributeLocation, 2, gl.FLOAT, false, 0, 0);
-    
-        var normalBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(mesh.vertexNormals), gl.STATIC_DRAW);
-        gl.enableVertexAttribArray(normalAttributeLocation);
-        gl.vertexAttribPointer(normalAttributeLocation, 3, gl.FLOAT, false, 0, 0);
-    
-        var indexBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
-        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(mesh.indices), gl.STATIC_DRAW);
+
+        arrayBuffer(mesh.vertices, 3, positionAttributeLocation);
+        arrayBuffer(mesh.textures, 2, uvAttributeLocation);
+        arrayBuffer(mesh.vertexNormals, 3, normalAttributeLocation);
+
+        indexBuffer(mesh.indices);
     }
 
-    for (let i in meshes)
+    function arrayBuffer(elements, size, attributeLocation)
     {
-        addMeshToScene(i);
+        const buffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(elements), gl.STATIC_DRAW);
+        gl.enableVertexAttribArray(attributeLocation);
+        gl.vertexAttribPointer(attributeLocation, size, gl.FLOAT, false, 0, 0);
+    }
+
+    function indexBuffer(elements)
+    {
+        const buffer = gl.createBuffer();
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer);
+        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(elements), gl.STATIC_DRAW);
     }
 
     function drawScene()
@@ -160,14 +154,10 @@ function main()
         gl.clearColor(0.00, 0.00, 0.00, 1.0);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-        // update world matrices for moving objects 
-        currentMatricesList[0] = setBallMatrix(ball.position.x, ball.position.y);
-        currentMatricesList[1] = setPaddleMatrix(paddle.position.x, paddle.position.y);
-        // walls not touched
-        for (let i = 5; i < currentMatricesList.length; i++) 
-        {
-            currentMatricesList[i] = setBrickMatrix(i, brickList[i-5].disabled);
-        }
+
+        // update world matrices for moving objects
+        updateObjectsMatrices();
+
 
         // transform light direction into camera space
         var directionalLightDirectionTransformed = utils.multiplyMatrix3Vector3(utils.sub3x3from4x4(VMatrix), directionalLightDirection);
@@ -182,10 +172,10 @@ function main()
         gl.uniform3fv(materialDiffuseColorHandle, materialDiffuseColor);  
         
         // pass each object with its matrix
-        for (var i = 0; i < meshes.length; i++) {
-            var WVMatrix = utils.multiplyMatrices(VMatrix, currentMatricesList[i]);
-            var WVPMatrix = utils.multiplyMatrices(PMatrix, WVMatrix);
-            var NMatrix = utils.invertMatrix(utils.transposeMatrix(WVMatrix));
+        for (let i = 0; i < meshes.length; i++) {
+            let WVMatrix = utils.multiplyMatrices(VMatrix, currentMatricesList[i]);
+            let WVPMatrix = utils.multiplyMatrices(PMatrix, WVMatrix);
+            let NMatrix = utils.invertMatrix(utils.transposeMatrix(WVMatrix));
 
             gl.uniformMatrix4fv(WVPMatrixHandle, gl.FALSE, utils.transposeMatrix(WVPMatrix));
             gl.uniformMatrix4fv(WVMatrixHandle, gl.FALSE, utils.transposeMatrix(WVMatrix));
@@ -197,12 +187,10 @@ function main()
 
             gl.bindVertexArray(vaos[i]);
             gl.drawElements(gl.TRIANGLES, meshes[i].indices.length, gl.UNSIGNED_SHORT, 0);
-        };
+        }
 
-        // todo tomorrow        
         window.requestAnimationFrame(drawScene);
     }
-
     drawScene();
 }
 
@@ -213,6 +201,10 @@ async function init() {
     setupCanvas();
     await loadShaders();
     await loadMeshes();
+
+    initializeObjects(); // set up objects in the logical model
+    initializeObjectsMatrices(); // set up all the matrices from the previous initialized objects
+
     main();
   
     // prepare canvas and body styles
@@ -251,9 +243,11 @@ async function init() {
     async function loadMeshes() {
         ballMesh = await utils.loadMesh(modelsDir + "Ball.obj");
         paddleMesh = await utils.loadMesh(modelsDir + "Paddle.obj");
-        wallMeshR = await utils.loadMesh(modelsDir + "SideWall.obj");
-        wallMeshL = await utils.loadMesh(modelsDir + "SideWall.obj");
-        wallMeshU = await utils.loadMesh(modelsDir + "TopWall.obj");
+        console.log(paddleMesh.vertices)
+        wallMeshR = await utils.loadMesh(modelsDir + "Wall.obj");
+        console.log(wallMeshR.vertices);
+        wallMeshL = await utils.loadMesh(modelsDir + "Wall.obj");
+        wallMeshU = await utils.loadMesh(modelsDir + "Wall.obj");
         brickMesh0 = await utils.loadMesh(modelsDir + "Brick.obj");
         brickMesh1 = await utils.loadMesh(modelsDir + "Brick.obj");
         brickMesh2 = await utils.loadMesh(modelsDir + "Brick.obj");

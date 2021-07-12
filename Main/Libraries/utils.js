@@ -572,8 +572,20 @@ var utils = {
 		return out;
 	},
 
+	MakeScaleNuMatrix: function(sx, sy, sz) {
+		// Create a scale matrix for a scale of ({sx}, {sy}, {sz}).
+
+		var out = this.identityMatrix();
+		out[0]  = sx;
+		out[5]  = sy;
+		out[10] = sz;
+		return out;
+	},
+
 	// **** PROJECTION MATRIX OPERATIONS ****
-	
+
+
+
 	MakeWorld: function (tx, ty, tz, rx, ry, rz, s) {
 		// Creates a world matrix for an object.
 
@@ -587,6 +599,23 @@ var utils = {
 		out = this.multiplyMatrices(Ry, out);
 		out = this.multiplyMatrices(Rx, out);
 		out = this.multiplyMatrices(T, out);
+
+		return out;
+	},
+
+	createGenericWorldMatrix: function(tx, ty, tz, rx, ry, rz, sx, sy, sz) {
+		let out;
+
+		let S = utils.MakeScaleNuMatrix(sx, sy, sz);
+		let Rx = utils.MakeRotateXMatrix(ry);
+		let Ry = utils.MakeRotateYMatrix(rx);
+		let Rz = utils.MakeRotateZMatrix(rz);
+		let T = utils.MakeTranslateMatrix(tx, ty, tz);
+
+		out = utils.multiplyMatrices(Rz, S);
+		out = utils.multiplyMatrices(Rx, out);
+		out = utils.multiplyMatrices(Ry, out);
+		out = utils.multiplyMatrices(T, out);
 
 		return out;
 	},

@@ -1,25 +1,23 @@
-var hideMatrix = utils.MakeWorld(0,0,0,0,0,0,0);
-
 // ball matrix
-var ballMatrix = utils.MakeWorld(0,0,0,0,0,0,1);
+let ballMatrix = null;
 
 // paddle matrix
-var paddleMatrix = utils.MakeWorld(0,0,-50,0,0,0,1);
+let paddleMatrix = null;
 
 // walls matrices
-var wallMatrixR = utils.MakeWorld(25,0,0,0,0,0,1);
-var wallMatrixL = utils.MakeWorld(-25,0,0,0,0,0,1);
-var wallMatrixU = utils.MakeWorld(0,0,-20,0,0,0,1);
+let wallMatrixR = null;
+let wallMatrixL = null;
+let wallMatrixU = null;
 
 // bricks matrices
-var brickMatrix0 = utils.MakeWorld(0,0,0,0,0,0,1);
-var brickMatrix1 = utils.MakeWorld(0,0,0,0,0,0,1);
-var brickMatrix2 = utils.MakeWorld(0,0,0,0,0,0,1);
-var brickMatrix3 = utils.MakeWorld(0,0,0,0,0,0,1);
-var brickMatrix4 = utils.MakeWorld(0,0,0,0,0,0,1);
+let brickMatrix0 = null;
+let brickMatrix1 = null;
+let brickMatrix2 = null;
+let brickMatrix3 = null;
+let brickMatrix4 = null;
 
 // initial objects matrices for restoring game to initial state
-var initialMatricesList = [
+let initialMatricesList = [
     ballMatrix,     // 0
     paddleMatrix,   // 1
     wallMatrixR,    // 2
@@ -34,7 +32,7 @@ var initialMatricesList = [
 ];
 
 // 
-var currentMatricesList = [
+let currentMatricesList = [
     ballMatrix,     // 0
     paddleMatrix,   // 1
     wallMatrixR,    // 2
@@ -48,26 +46,63 @@ var currentMatricesList = [
     // other bricks...
 ];
 
-
-
-function setBallMatrix(ballX, ballY)
+/***
+ * remember that moving and scaling on y for the object in the controller
+ * must result in a movement and scaling on the z for the matrix
+ ***/
+function updateObjectsMatrices()
 {
-    return utils.MakeWorld(ballX, 0, ballY, 0, 0, 0, 1);
-}
-
-function setBrickMatrix(matrixListIndex, disabled)
-{
-    if(disabled)
+    for(let i = 0; i < currentMatricesList.length; i++)
     {
-        return hideMatrix;
-    }
-    else
-    {
-        return currentMatricesList[matrixListIndex];
+        let currentObject = objectsList[i];
+        if(currentObject.hasChanged)
+        {
+            currentMatricesList[i] = utils.createGenericWorldMatrix(
+                currentObject.position.x,
+                0, // always zero for this project
+                currentObject.position.y,
+                0, // always zero for this project
+                0, // always zero for this project
+                0, // always zero for this project
+                currentObject.scale.x,
+                0, // always zero for this project
+                currentObject.scale.y
+            );
+            currentObject.hasChanged = false;
+        }
     }
 }
 
-function setPaddleMatrix(paddleX, paddleY)
+// probably needed for restoring game to the initial view
+function initializeObjectsMatrices()
 {
-    return utils.MakeWorld(paddleX, 0,paddleY,0,0,0,1);
+    for(let i = 0; i < currentMatricesList.length; i++)
+    {
+        let currentObject = objectsList[i];
+        currentMatricesList[i] = utils.createGenericWorldMatrix(
+            currentObject.position.x,
+            0, // always zero for this project
+            currentObject.position.y,
+            0, // always zero for this project
+            0, // always zero for this project
+            0, // always zero for this project
+            currentObject.scale.x,
+            0, // always zero for this project
+            currentObject.scale.y
+        );
+        initialMatricesList[i] = utils.createGenericWorldMatrix(
+            currentObject.position.x,
+            0, // always zero for this project
+            currentObject.position.y,
+            0, // always zero for this project
+            0, // always zero for this project
+            0, // always zero for this project
+            currentObject.scale.x,
+            0, // always zero for this project
+            currentObject.scale.y
+        );
+        currentObject.hasChanged = false;
+    }
+    console.log(currentMatricesList);
 }
+

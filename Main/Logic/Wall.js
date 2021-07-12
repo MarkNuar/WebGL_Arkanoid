@@ -1,9 +1,11 @@
 class Wall 
 {
-    constructor(position, size)
+    constructor(position, scale)
     {
         this.position = position;
-        this.size = size;
+        this.scale = scale;
+        this.hasChanged = false;
+
         this.canBeDisabled = false;
         this.disabled = false;
         this.isPaddle = false;
