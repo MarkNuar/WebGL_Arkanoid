@@ -26,6 +26,9 @@ let wallsList = null
 // objects list
 let objectsList = null;
 
+// input managmenet
+let inputDisabled = false;
+
 function initializeObjects()
 {
     /**
@@ -77,11 +80,42 @@ function initializeObjects()
         // brick4
     ];
 }
+function initializeBallAndPaddle()
+{
+    ball = new Ball(new Vec2(0, 8), new Vec2(0.6, 0.6));
+    paddle = new Paddle(new Vec2(0, 14.5), new Vec2(2, 0.5));
+
+    ball.hasChanged = true;   // forces redrawn
+    paddle.hasChanged = true; // forces redrawn
+
+    objectsList[0] = ball;
+    objectsList[1] = paddle;
+}
 
 function resetGame()
 {
     initializeObjects(); // set up objects in the logical model
     forceUpdateMatrices(); // set up all the matrices from the previous initialized objects
+}
+
+function notifyBallDeath()
+{
+    if(lives>1)
+    {
+        // respawn ball
+        initializeBallAndPaddle();
+        lives--;
+    }
+    else
+    {
+        // TODO ENDGAME
+        console.warn("GAME ENDED, NO MORE LIVES"); 
+        initializeBallAndPaddle();
+        // stop receiving inputs
+        window.removeEventListener("keydown", inputDown);
+        window.removeEventListener("keyup", inputUp);
+        inputDisabled = true;
+    }
 }
 
 // function to update the game state
@@ -121,14 +155,16 @@ function updateGameState()
 
     paddle.movePaddle(deltaTime);
 
-    // win condition (?)
+    // TODO IF ALL BRICKS DESTROYED ENG GAME
 }
 
 //add listeners on key bindings to move objects
-window.addEventListener("keydown", onKeyPressed);
-window.addEventListener("keyup", onKeyReleased);
+window.addEventListener("keydown", inputDown);
+window.addEventListener("keyup", inputUp);
 
-function onKeyPressed(e) {
+window.addEventListener("keydown", reset);
+
+function inputDown(e) {
     if (e.key === "a" || e.key === "ArrowLeft") {
         //move paddle to left
         paddle.moveLeft = true;
@@ -137,12 +173,21 @@ function onKeyPressed(e) {
         //move paddle to right
         paddle.moveRight = true;
     }
+}
+
+function reset(e){
     if (e.keyCode === 13) { // press enter
         resetGame();
+        if(inputDisabled)
+        {
+            window.addEventListener("keydown", inputDown);
+            window.addEventListener("keyup", inputUp);
+            inputDisabled = false;
+        }
     }
 }
 
-function onKeyReleased(e) {
+function inputUp(e) {
     if (e.key === "a" || e.key === "ArrowLeft") {
         //stop moving paddle to left
         paddle.moveLeft = false;

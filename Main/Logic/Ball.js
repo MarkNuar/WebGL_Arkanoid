@@ -30,6 +30,11 @@ class Ball
     {
         this.position = this.position.add(this.velocity.normalize().scale(this.speed * deltaTime));
         this.hasChanged = true;
+
+        if(this.position.y > paddle.position.y + BALL_DEATH_PADDING) // ball under the paddle
+        {
+            notifyBallDeath();
+        }
     }
 
     checkAndHandleCollision(otherObject)

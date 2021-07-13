@@ -33,6 +33,7 @@ let meshes;
 let score = 0;
 let currentScore = 0;
 let done = false;
+let lives = 3;
 
 // texture variable
 let texture;
