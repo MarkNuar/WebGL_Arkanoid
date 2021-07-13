@@ -76,6 +76,12 @@ function initializeObjects()
     ];
 }
 
+function resetGame()
+{
+    initializeObjects(); // set up objects in the logical model
+    forceUpdateMatrices(); // set up all the matrices from the previous initialized objects
+}
+
 // function to update the game state
 function updateGameState()
 {
@@ -84,22 +90,27 @@ function updateGameState()
     deltaTime = currentTime - lastUpdateTime;
     lastUpdateTime = currentTime;
 
-    if(!ball.moving)
+    // ball starts moving when the paddle is first moved
+    if(!ball.moving && (paddle.moveLeft || paddle.moveRight))
     {
+        console.log("start moving")
         ball.startMoving();
     }
-    else
+
+    if(ball.moving)
     {
+        ball.moveBall(deltaTime);
+
         // loop over all objects in level and check collision with them
         bricksList.forEach(brick => {
             ball.checkAndHandleCollision(brick);
         });
+
         wallsList.forEach(wall => {
             ball.checkAndHandleCollision(wall);
         });
-        ball.checkAndHandleCollision(paddle);
 
-        ball.moveBall(deltaTime);
+        ball.checkAndHandleCollision(paddle);
     }
 
     paddle.movePaddle(deltaTime);
@@ -118,7 +129,12 @@ function onKeyPressed(e) {
     }
     if (e.key === "d" || e.key === "ArrowRight") {
         //move paddle to right
-            paddle.moveRight = true;
+        paddle.moveRight = true;
+    }
+    if (e.keyCode === 13)
+    {
+        // start/reset game (?)
+        resetGame();
     }
 }
 

@@ -13,20 +13,40 @@
     background-color: black;
 }
 
-.centerDiv{
+.leftDiv{
     position: absolute;
-    width: 100%;
+    width: 50%;
     height: 10%;
     top: 2%;
-    text-align: center;
+    text-align: left;
+    padding: 1vmin;
+}
+
+.rightDiv{
+    position: absolute;
+    width: 98%;
+    height: 10%;
+    top: 2%;
+    text-align: right;
+    padding: 1vmin;
 }
 
 .title{
     height: 100%;
     margin: 0%;
-    font-size: 8vmin;
+    font-size: 6vmin;
     font-family: "Retronoid";
     color: white; 
     opacity: 1.0; 
+    overflow:auto;
+}
+
+.content{
+    height: 100%;
+    margin: 0%;
+    font-size: 2.5vmin;
+    font-family: "Retronoid";
+    color: white;
+    opacity: 1.0;
     overflow:auto;
 }

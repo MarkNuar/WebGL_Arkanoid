@@ -7,7 +7,7 @@ let modelsDir;
 
 //camera variables
 let cx = 0;
-let cy = 25;
+let cy = 50;
 let cz = 0;
 let elev = -90;
 let ang = 0;
@@ -105,7 +105,7 @@ function main()
 
     // perspective matrix
     //let PMatrix = utils.MakeProjection(gl.canvas.width/45, gl.canvas.width / gl.canvas.height, 1, 100);
-    let PMatrix = utils.MakePerspective(90, gl.canvas.width / gl.canvas.height, 1, 100);
+    let PMatrix = utils.MakePerspective(45, gl.canvas.width / gl.canvas.height, 1, 100);
 
 
     // view matrix
@@ -154,7 +154,7 @@ function main()
         updateGameState();
 
         // update world matrices for moving objects
-        updateObjectsMatrices();
+        updateMatrices();
 
         // transform light direction into camera space
         let directionalLightDirectionTransformed = utils.multiplyMatrix3Vector3(utils.sub3x3from4x4(VMatrix), directionalLightDirection);
@@ -199,8 +199,7 @@ async function init() {
     await loadShaders();
     await loadMeshes();
 
-    initializeObjects(); // set up objects in the logical model
-    initializeObjectsMatrices(); // set up all the matrices from the previous initialized objects
+    resetGame();
 
     main();
   
