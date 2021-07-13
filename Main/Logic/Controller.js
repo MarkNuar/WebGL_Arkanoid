@@ -36,8 +36,8 @@ function initializeObjects()
     ball = new Ball(new Vec2(0, 8), new Vec2(0.6, 0.6));
     paddle = new Paddle(new Vec2(0, 15), new Vec2(2, 0.5));
 
-    wallR = new Wall(new Vec2(-10, 0), new Vec2(0.5, 15));
-    wallL = new Wall(new Vec2(10, 0), new Vec2(0.5, 15));
+    wallR = new Wall(new Vec2(-10.5, 0), new Vec2(0.5, 15));
+    wallL = new Wall(new Vec2(10.5, 0), new Vec2(0.5, 15));
     wallU = new Wall(new Vec2(0, -15), new Vec2(11, 0.5));
 
     brick0 = new Brick(new Vec2(0,0), new Vec2(1,1));
