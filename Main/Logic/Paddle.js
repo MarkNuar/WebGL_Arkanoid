@@ -27,5 +27,15 @@ class Paddle
             this.hasChanged = true;
             this.position.x += this.speed * deltaTime;
         }
+
+        // very ugly code to limit paddle position inside walls
+        if(this.position.x+this.scale.x > wallL.position.x-wallL.scale.x-PADDLE_WALL_PADDING)
+        {
+            this.position.x = wallL.position.x-wallL.scale.x-this.scale.x-PADDLE_WALL_PADDING;
+        }
+        else if(this.position.x-this.scale.x < wallR.position.x+wallR.scale.x+PADDLE_WALL_PADDING)
+        {
+            this.position.x = wallR.position.x+wallR.scale.x+this.scale.x+PADDLE_WALL_PADDING;
+        }
     }
 }

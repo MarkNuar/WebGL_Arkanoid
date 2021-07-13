@@ -32,13 +32,6 @@ class Ball
         this.hasChanged = true;
     }
 
-    restartBall() // todo
-    {
-        //this.position = this.initialPosition;
-        this.velocity = new Vec2(0,0);
-        this.moving = false;
-    }
-
     checkAndHandleCollision(otherObject)
     {
         if(otherObject.disabled)
@@ -57,7 +50,7 @@ class Ball
         let clamped = new Vec2(
             this.clamp(difference.x, -aabbhalfExtents.x, aabbhalfExtents.x),
             this.clamp(difference.y, -aabbhalfExtents.y, aabbhalfExtents.y)
-        ); //TODO
+        );
         
         let closest = aabbPosition.add(clamped);
 
@@ -65,6 +58,7 @@ class Ball
 
         if(difference.getModule() < ballRadius)
         {
+            console.log(otherObject.disabled);
             this.handleCollision(otherObject, difference);
         }
     }
@@ -87,7 +81,9 @@ class Ball
         {
             if(otherObject.canBeDisabled)
             {
+                console.log("disabling");
                 otherObject.disable();
+                console.log(otherObject.disabled);
             }
             let collisionDirection = this.getCollisionDirection(difference)
             if(collisionDirection === 3 || collisionDirection === 1)

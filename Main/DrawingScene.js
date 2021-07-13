@@ -255,10 +255,11 @@ async function init() {
             wallMeshL,
             wallMeshU, 
             brickMesh0,
-            brickMesh1,
-            brickMesh2,
-            brickMesh3,
-            brickMesh4
+            //TODO
+            // brickMesh1,
+            // brickMesh2,
+            // brickMesh3,
+            // brickMesh4
             // add more bricks
         ];
     }

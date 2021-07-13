@@ -34,18 +34,18 @@ function initializeObjects()
      */
 
     ball = new Ball(new Vec2(0, 8), new Vec2(0.6, 0.6));
-    paddle = new Paddle(new Vec2(0, 15), new Vec2(2, 0.5));
+    paddle = new Paddle(new Vec2(0, 14.5), new Vec2(2, 0.5));
 
     wallR = new Wall(new Vec2(-10.5, 0), new Vec2(0.5, 15));
     wallL = new Wall(new Vec2(10.5, 0), new Vec2(0.5, 15));
     wallU = new Wall(new Vec2(0, -15), new Vec2(11, 0.5));
 
-    brick0 = new Brick(new Vec2(0,0), new Vec2(1,1));
-    brick1 = new Brick(new Vec2(0,0), new Vec2(0,0));
+    brick0 = new Brick(new Vec2(0,0), new Vec2(1,1), true);
+    brick1 = new Brick(new Vec2(0,0), new Vec2(0,0), true);
 
-    brick2 = new Brick(new Vec2(0,0), new Vec2(0,0));
-    brick3 = new Brick(new Vec2(0,0), new Vec2(0,0));
-    brick4 = new Brick(new Vec2(0,0), new Vec2(0,0));
+    brick2 = new Brick(new Vec2(0,0), new Vec2(0,0), true);
+    brick3 = new Brick(new Vec2(0,0), new Vec2(0,0), true);
+    brick4 = new Brick(new Vec2(0,0), new Vec2(0,0), true);
 
     objectsList = [
         ball,
@@ -54,10 +54,11 @@ function initializeObjects()
         wallL,
         wallU,
         brick0,
-        brick1,
-        brick2,
-        brick3,
-        brick4
+        //TODO
+        // brick1,
+        // brick2,
+        // brick3,
+        // brick4
         // add other bricks ...
     ];
 
@@ -69,10 +70,11 @@ function initializeObjects()
 
     bricksList = [
         brick0,
-        brick1,
-        brick2,
-        brick3,
-        brick4
+        //TODO
+        // brick1,
+        // brick2,
+        // brick3,
+        // brick4
     ];
 }
 
@@ -104,6 +106,10 @@ function updateGameState()
         // loop over all objects in level and check collision with them
         bricksList.forEach(brick => {
             ball.checkAndHandleCollision(brick);
+            if(brick.hasChanged) // brick disabled
+            {
+                //todo manager brick counter and end game
+            }
         });
 
         wallsList.forEach(wall => {
@@ -131,9 +137,7 @@ function onKeyPressed(e) {
         //move paddle to right
         paddle.moveRight = true;
     }
-    if (e.keyCode === 13)
-    {
-        // start/reset game (?)
+    if (e.keyCode === 13) { // press enter
         resetGame();
     }
 }
