@@ -30,10 +30,12 @@ let meshes;
 
 
 //score variables
-let score = 0;
+let recordScore = 0;
 let currentScore = 0;
 let done = false;
 let lives = 3;
+
+let textHandle = null;
 
 // texture variable
 let texture;
@@ -203,7 +205,11 @@ async function init() {
     resetGame();
 
     main();
-  
+
+    textHandle = document.getElementById("text");
+
+    updateScreenText();
+
     // prepare canvas and body styles
     function setupCanvas() {
         let canvas = document.getElementById("canvas");
@@ -264,6 +270,17 @@ async function init() {
             // add more bricks
         ];
     }
-  } 
+}
 
 window.onload = init;
+
+function updateScreenText()
+{
+
+    textHandle.innerHTML =
+        '    <h1 class="content" id="text">\n' +
+        '        Record  : ' + recordScore + '<br>\n' +
+        '        Current : ' + currentScore + '<br>\n' +
+        '        Lives : ' + lives +
+        '    </h1>';
+}

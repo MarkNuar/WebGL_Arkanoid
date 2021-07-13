@@ -105,16 +105,18 @@ function notifyBallDeath()
         // respawn ball
         initializeBallAndPaddle();
         lives--;
+        updateScreenText();
     }
     else
     {
-        // TODO ENDGAME
-        console.warn("GAME ENDED, NO MORE LIVES"); 
         initializeBallAndPaddle();
+        lives--;
+        updateScreenText();
         // stop receiving inputs
         window.removeEventListener("keydown", inputDown);
         window.removeEventListener("keyup", inputUp);
         inputDisabled = true;
+        // TODO SHOW ENDGAME RESULTS
     }
 }
 
@@ -155,7 +157,7 @@ function updateGameState()
 
     paddle.movePaddle(deltaTime);
 
-    // TODO IF ALL BRICKS DESTROYED ENG GAME
+    // TODO IF ALL BRICKS SHOW ENDGAME RESULTS
 }
 
 //add listeners on key bindings to move objects
