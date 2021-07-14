@@ -72,15 +72,9 @@ class Ball
     {
         if(otherObject.isPaddle) // just hit the player
         {
-            let paddleCenter = otherObject.position.x + otherObject.scale.x;
-            let distance = (this.position.x + this.radius) - paddleCenter;
-            let percentage = distance/(otherObject.scale.x);
-
-            let strength = 2;
-            let oldVelocity = this.velocity;
-            this.velocity.x = this.initialBallVelocity.x * percentage * strength;
-            this.velocity.y = -1.0 * Math.abs(this.velocity.y);
-            this.velocity = (this.velocity.normalize()).scale(oldVelocity.getModule());
+            this.velocity.y = - this.velocity.y;
+            this.velocity.x += (this.position.x - otherObject.position.x)/5; // it's a kind of magic
+            this.velocity = this.velocity.normalize();
         }
         else // just hit a brick or wall
         {

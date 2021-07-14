@@ -62,8 +62,6 @@ function main(){
 
         arrayBuffer(mesh.vertices, 3, positionAttributeLocation);
         arrayBuffer(mesh.textures, 2, uvAttributeLocation);
-
-        console.log(mesh.textures);
         arrayBuffer(mesh.vertexNormals, 3, normalAttributeLocation);
 
         indexBuffer(mesh.indices);
