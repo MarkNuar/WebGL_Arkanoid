@@ -97,11 +97,11 @@ class Ball
                 let penetration = this.radius - Math.abs(difference.x)
                 if(collisionDirection === 3)
                 {
-                    this.position.x += penetration;
+                    this.position.x += (penetration);
                 }
                 else
                 {
-                    this.position.x -= penetration;
+                    this.position.x -= (penetration);
                 }
             }
             else
@@ -110,11 +110,11 @@ class Ball
                 let penetration = this.radius - Math.abs(difference.y)
                 if(collisionDirection === 0)
                 {
-                    this.position.y -= penetration;
+                    this.position.y -= (penetration);
                 }
                 else
                 {
-                    this.position.y += penetration;
+                    this.position.y += (penetration);
                 }
             }
         }        
