@@ -114,6 +114,7 @@ function initializeObjects()
 
     ball = new Ball(new Vec2(0, 16), new Vec2(0.3, 0.3));
     paddle = new Paddle(new Vec2(0, 17.75), new Vec2(1.5, 0.25));
+    paddle2 = new Paddle(new Vec2(5, 17.75), new Vec2(1.5, 0.25));
 
     wallR = new Wall(new Vec2(-15, 4), new Vec2(0.5, 14));
     wallL = new Wall(new Vec2(15, 4), new Vec2(0.5, 14));
@@ -360,6 +361,7 @@ function initializeBallAndPaddle()
 {
     ball = new Ball(new Vec2(0, 16), new Vec2(0.3, 0.3));
     paddle = new Paddle(new Vec2(0, 17.75), new Vec2(1.5, 0.25));
+    paddle2 = new Paddle(new Vec2(5, 17.75), new Vec2(1.5, 0.25));
 
     ball.hasChanged = true;   // forces redrawn
     paddle.hasChanged = true; // forces redrawn
@@ -471,14 +473,6 @@ function inputDown(e) {
         //move paddle to right
         paddle.moveRight = true;
     }
-    if (e.key === "2")
-    {
-        PMatrix = utils.MakeProjection(gl.canvas.width/45, gl.canvas.width / gl.canvas.height, 1, 100);
-    }
-    if (e.key === "3")
-    {
-        PMatrix = utils.MakePerspective(45, gl.canvas.width / gl.canvas.height, 1, 100);
-    }
 }
 
 function reset(e){
@@ -501,5 +495,17 @@ function inputUp(e) {
     if (e.key === "d" || e.key === "ArrowRight") {
         //stop moving paddle to right
         paddle.moveRight = false;
+    }
+}
+
+function onCheckBoxChange(value)
+{
+    if(value)
+    {
+        PMatrix = utils.MakePerspective(45, gl.canvas.width / gl.canvas.height, 1, 100);
+    }
+    else
+    {
+        PMatrix = utils.MakeProjection(gl.canvas.width/45, gl.canvas.width / gl.canvas.height, 1, 100);
     }
 }

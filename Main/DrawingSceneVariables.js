@@ -95,7 +95,9 @@ let textHandle = null;
 let texture;
 
 // directional light
-let directionalLightDirection = [0.0, 1.0, 0.0];
+let dirLightAlpha;
+let dirLightBeta;
+let directionalLightDirection;// = [0.0, 1.0, 0.0];
 let directionalLightColor = [1.0, 1.0, 1.0];
 // define ambient light and color
 let ambientLightColor = [1.0, 1.0, 1.0];

@@ -98,6 +98,14 @@ function drawScene(){
     // update world matrices for moving objects
     updateMatrices();
 
+    // get directional light directions
+    dirLightAlpha = utils.degToRad(document.getElementById("dirLightAlpha").value);
+    dirLightBeta = utils.degToRad(document.getElementById("dirLightBeta").value);
+    directionalLightDirection = [Math.cos(Math.PI - dirLightAlpha) * Math.cos(dirLightBeta),
+        Math.sin(Math.PI - dirLightAlpha),
+        Math.cos(Math.PI - dirLightAlpha) * Math.sin(dirLightBeta)
+    ];
+
     // transform light direction into camera space
     let directionalLightDirectionTransformed = utils.multiplyMatrix3Vector3(utils.sub3x3from4x4(VMatrix), directionalLightDirection);
 
