@@ -3,6 +3,17 @@ let lastUpdateTime = (new Date).getTime();
 let currentTime;
 let deltaTime;
 
+// game variables
+let recordScore = 0;
+let currentScore = 0;
+let hasGameEnded = false;
+let maxLives = 3;
+let currentLives = 3;
+let maxNumBricks = 0;
+let currentNumBricks = 0;
+
+
+
 // ball
 let ball = null;
 
@@ -102,81 +113,81 @@ function initializeObjects()
      */
 
     ball = new Ball(new Vec2(0, 16), new Vec2(0.3, 0.3));
-    paddle = new Paddle(new Vec2(0, 18), new Vec2(1.5, 0.25));
+    paddle = new Paddle(new Vec2(0, 17.75), new Vec2(1.5, 0.25));
 
     wallR = new Wall(new Vec2(-15, 4), new Vec2(0.5, 14));
     wallL = new Wall(new Vec2(15, 4), new Vec2(0.5, 14));
     wallU = new Wall(new Vec2(0, -9.5), new Vec2(15, 0.5));
 
-    brickG0 = new Brick(new Vec2(0,0), new Vec2(1,0.5), true);
-    brickG1 = new Brick(new Vec2(-2.1,0), new Vec2(1,0.5), true);
-    brickG2 = new Brick(new Vec2(-4.2,0), new Vec2(1,0.5), true);
-    brickG3 = new Brick(new Vec2(-6.3,0), new Vec2(1,0.5), true);
-    brickG4 = new Brick(new Vec2(-8.4,0), new Vec2(1,0.5), true);
-    brickG5 = new Brick(new Vec2(-10.5, 0), new Vec2(1,0.5), true);
-    brickG6 = new Brick(new Vec2(-12.6,0), new Vec2(1,0.5), true);
-    brickG7 = new Brick(new Vec2(2.1,0), new Vec2(1,0.5), true);
-    brickG8 = new Brick(new Vec2(4.2,0), new Vec2(1,0.5), true);
-    brickG9 = new Brick(new Vec2(6.3,0), new Vec2(1,0.5), true);
-    brickG10 = new Brick(new Vec2(8.4,0), new Vec2(1,0.5), true);
-    brickG11 = new Brick(new Vec2(10.5,0), new Vec2(1,0.5), true);
-    brickG12 = new Brick(new Vec2(12.6,0), new Vec2(1,0.5), true);
+    brickG0 = new Brick(new Vec2(0,0), new Vec2(1,0.5));
+    brickG1 = new Brick(new Vec2(-2.1,0), new Vec2(1,0.5));
+    brickG2 = new Brick(new Vec2(-4.2,0), new Vec2(1,0.5));
+    brickG3 = new Brick(new Vec2(-6.3,0), new Vec2(1,0.5));
+    brickG4 = new Brick(new Vec2(-8.4,0), new Vec2(1,0.5));
+    brickG5 = new Brick(new Vec2(-10.5, 0), new Vec2(1,0.5));
+    brickG6 = new Brick(new Vec2(-12.6,0), new Vec2(1,0.5));
+    brickG7 = new Brick(new Vec2(2.1,0), new Vec2(1,0.5));
+    brickG8 = new Brick(new Vec2(4.2,0), new Vec2(1,0.5));
+    brickG9 = new Brick(new Vec2(6.3,0), new Vec2(1,0.5));
+    brickG10 = new Brick(new Vec2(8.4,0), new Vec2(1,0.5));
+    brickG11 = new Brick(new Vec2(10.5,0), new Vec2(1,0.5));
+    brickG12 = new Brick(new Vec2(12.6,0), new Vec2(1,0.5));
 
-    brickP0 = new Brick(new Vec2(0,-1.1), new Vec2(1,0.5), true);
-    brickP1 = new Brick(new Vec2(-2.1,-1.1), new Vec2(1,0.5), true);
-    brickP2 = new Brick(new Vec2(-4.2,-1.1), new Vec2(1,0.5), true);
-    brickP3 = new Brick(new Vec2(-6.3,-1.1), new Vec2(1,0.5), true);
-    brickP4 = new Brick(new Vec2(-8.4,-1.1), new Vec2(1,0.5), true);
-    brickP5 = new Brick(new Vec2(-10.5, -1.1), new Vec2(1,0.5), true);
-    brickP6 = new Brick(new Vec2(-12.6,-1.1), new Vec2(1,0.5), true);
-    brickP7 = new Brick(new Vec2(2.1,-1.1), new Vec2(1,0.5), true);
-    brickP8 = new Brick(new Vec2(4.2,-1.1), new Vec2(1,0.5), true);
-    brickP9 = new Brick(new Vec2(6.3,-1.1), new Vec2(1,0.5), true);
-    brickP10 = new Brick(new Vec2(8.4,-1.1), new Vec2(1,0.5), true);
-    brickP11 = new Brick(new Vec2(10.5,-1.1), new Vec2(1,0.5), true);
-    brickP12 = new Brick(new Vec2(12.6,-1.1), new Vec2(1,0.5), true);
+    brickP0 = new Brick(new Vec2(0,-1.1), new Vec2(1,0.5));
+    brickP1 = new Brick(new Vec2(-2.1,-1.1), new Vec2(1,0.5));
+    brickP2 = new Brick(new Vec2(-4.2,-1.1), new Vec2(1,0.5));
+    brickP3 = new Brick(new Vec2(-6.3,-1.1), new Vec2(1,0.5));
+    brickP4 = new Brick(new Vec2(-8.4,-1.1), new Vec2(1,0.5));
+    brickP5 = new Brick(new Vec2(-10.5, -1.1), new Vec2(1,0.5));
+    brickP6 = new Brick(new Vec2(-12.6,-1.1), new Vec2(1,0.5));
+    brickP7 = new Brick(new Vec2(2.1,-1.1), new Vec2(1,0.5));
+    brickP8 = new Brick(new Vec2(4.2,-1.1), new Vec2(1,0.5));
+    brickP9 = new Brick(new Vec2(6.3,-1.1), new Vec2(1,0.5));
+    brickP10 = new Brick(new Vec2(8.4,-1.1), new Vec2(1,0.5));
+    brickP11 = new Brick(new Vec2(10.5,-1.1), new Vec2(1,0.5));
+    brickP12 = new Brick(new Vec2(12.6,-1.1), new Vec2(1,0.5));
 
-    brickY0 = new Brick(new Vec2(0,-2.2), new Vec2(1,0.5), true);
-    brickY1 = new Brick(new Vec2(-2.1,-2.2), new Vec2(1,0.5), true);
-    brickY2 = new Brick(new Vec2(-4.2,-2.2), new Vec2(1,0.5), true);
-    brickY3 = new Brick(new Vec2(-6.3,-2.2), new Vec2(1,0.5), true);
-    brickY4 = new Brick(new Vec2(-8.4,-2.2), new Vec2(1,0.5), true);
-    brickY5 = new Brick(new Vec2(-10.5, -2.2), new Vec2(1,0.5), true);
-    brickY6 = new Brick(new Vec2(-12.6,-2.2), new Vec2(1,0.5), true);
-    brickY7 = new Brick(new Vec2(2.1,-2.2), new Vec2(1,0.5), true);
-    brickY8 = new Brick(new Vec2(4.2,-2.2), new Vec2(1,0.5), true);
-    brickY9 = new Brick(new Vec2(6.3,-2.2), new Vec2(1,0.5), true);
-    brickY10 = new Brick(new Vec2(8.4,-2.2), new Vec2(1,0.5), true);
-    brickY11 = new Brick(new Vec2(10.5,-2.2), new Vec2(1,0.5), true);
-    brickY12 = new Brick(new Vec2(12.6,-2.2), new Vec2(1,0.5), true);
+    brickY0 = new Brick(new Vec2(0,-2.2), new Vec2(1,0.5));
+    brickY1 = new Brick(new Vec2(-2.1,-2.2), new Vec2(1,0.5));
+    brickY2 = new Brick(new Vec2(-4.2,-2.2), new Vec2(1,0.5));
+    brickY3 = new Brick(new Vec2(-6.3,-2.2), new Vec2(1,0.5));
+    brickY4 = new Brick(new Vec2(-8.4,-2.2), new Vec2(1,0.5));
+    brickY5 = new Brick(new Vec2(-10.5, -2.2), new Vec2(1,0.5));
+    brickY6 = new Brick(new Vec2(-12.6,-2.2), new Vec2(1,0.5));
+    brickY7 = new Brick(new Vec2(2.1,-2.2), new Vec2(1,0.5));
+    brickY8 = new Brick(new Vec2(4.2,-2.2), new Vec2(1,0.5));
+    brickY9 = new Brick(new Vec2(6.3,-2.2), new Vec2(1,0.5));
+    brickY10 = new Brick(new Vec2(8.4,-2.2), new Vec2(1,0.5));
+    brickY11 = new Brick(new Vec2(10.5,-2.2), new Vec2(1,0.5));
+    brickY12 = new Brick(new Vec2(12.6,-2.2), new Vec2(1,0.5));
 
-    brickR0 = new Brick(new Vec2(0,-3.3), new Vec2(1,0.5), true);
-    brickR1 = new Brick(new Vec2(-2.1,-3.3), new Vec2(1,0.5), true);
-    brickR2 = new Brick(new Vec2(-4.2,-3.3), new Vec2(1,0.5), true);
-    brickR3 = new Brick(new Vec2(-6.3,-3.3), new Vec2(1,0.5), true);
-    brickR4 = new Brick(new Vec2(-8.4,-3.3), new Vec2(1,0.5), true);
-    brickR5 = new Brick(new Vec2(-10.5, -3.3), new Vec2(1,0.5), true);
-    brickR6 = new Brick(new Vec2(-12.6,-3.3), new Vec2(1,0.5), true);
-    brickR7 = new Brick(new Vec2(2.1,-3.3), new Vec2(1,0.5), true);
-    brickR8 = new Brick(new Vec2(4.2,-3.3), new Vec2(1,0.5), true);
-    brickR9 = new Brick(new Vec2(6.3,-3.3), new Vec2(1,0.5), true);
-    brickR10 = new Brick(new Vec2(8.4,-3.3), new Vec2(1,0.5), true);
-    brickR11 = new Brick(new Vec2(10.5,-3.3), new Vec2(1,0.5), true);
-    brickR12 = new Brick(new Vec2(12.6,-3.3), new Vec2(1,0.5), true);
+    brickR0 = new Brick(new Vec2(0,-3.3), new Vec2(1,0.5));
+    brickR1 = new Brick(new Vec2(-2.1,-3.3), new Vec2(1,0.5));
+    brickR2 = new Brick(new Vec2(-4.2,-3.3), new Vec2(1,0.5));
+    brickR3 = new Brick(new Vec2(-6.3,-3.3), new Vec2(1,0.5));
+    brickR4 = new Brick(new Vec2(-8.4,-3.3), new Vec2(1,0.5));
+    brickR5 = new Brick(new Vec2(-10.5, -3.3), new Vec2(1,0.5));
+    brickR6 = new Brick(new Vec2(-12.6,-3.3), new Vec2(1,0.5));
+    brickR7 = new Brick(new Vec2(2.1,-3.3), new Vec2(1,0.5));
+    brickR8 = new Brick(new Vec2(4.2,-3.3), new Vec2(1,0.5));
+    brickR9 = new Brick(new Vec2(6.3,-3.3), new Vec2(1,0.5));
+    brickR10 = new Brick(new Vec2(8.4,-3.3), new Vec2(1,0.5));
+    brickR11 = new Brick(new Vec2(10.5,-3.3), new Vec2(1,0.5));
+    brickR12 = new Brick(new Vec2(12.6,-3.3), new Vec2(1,0.5));
 
-    brickN0 = new Brick(new Vec2(0,-4.4), new Vec2(1,0.5), true);
-    brickN1 = new Brick(new Vec2(-2.1,-4.4), new Vec2(1,0.5), true);
-    brickN2 = new Brick(new Vec2(-4.2,-4.4), new Vec2(1,0.5), true);
-    brickN3 = new Brick(new Vec2(-6.3,-4.4), new Vec2(1,0.5), true);
-    brickN4 = new Brick(new Vec2(-8.4,-4.4), new Vec2(1,0.5), true);
-    brickN5 = new Brick(new Vec2(-10.5, -4.4), new Vec2(1,0.5), true);
-    brickN6 = new Brick(new Vec2(-12.6,-4.4), new Vec2(1,0.5), true);
-    brickN7 = new Brick(new Vec2(2.1,-4.4), new Vec2(1,0.5), true);
-    brickN8 = new Brick(new Vec2(4.2,-4.4), new Vec2(1,0.5), true);
-    brickN9 = new Brick(new Vec2(6.3,-4.4), new Vec2(1,0.5), true);
-    brickN10 = new Brick(new Vec2(8.4,-4.4), new Vec2(1,0.5), true);
-    brickN11 = new Brick(new Vec2(10.5,-4.4), new Vec2(1,0.5), true);
-    brickN12 = new Brick(new Vec2(12.6,-4.4), new Vec2(1,0.5), true);
+    brickN0 = new Brick(new Vec2(0,-4.4), new Vec2(1,0.5));
+    brickN1 = new Brick(new Vec2(-2.1,-4.4), new Vec2(1,0.5));
+    brickN2 = new Brick(new Vec2(-4.2,-4.4), new Vec2(1,0.5));
+    brickN3 = new Brick(new Vec2(-6.3,-4.4), new Vec2(1,0.5));
+    brickN4 = new Brick(new Vec2(-8.4,-4.4), new Vec2(1,0.5));
+    brickN5 = new Brick(new Vec2(-10.5, -4.4), new Vec2(1,0.5));
+    brickN6 = new Brick(new Vec2(-12.6,-4.4), new Vec2(1,0.5));
+    brickN7 = new Brick(new Vec2(2.1,-4.4), new Vec2(1,0.5));
+    brickN8 = new Brick(new Vec2(4.2,-4.4), new Vec2(1,0.5));
+    brickN9 = new Brick(new Vec2(6.3,-4.4), new Vec2(1,0.5));
+    brickN10 = new Brick(new Vec2(8.4,-4.4), new Vec2(1,0.5));
+    brickN11 = new Brick(new Vec2(10.5,-4.4), new Vec2(1,0.5));
+    brickN12 = new Brick(new Vec2(12.6,-4.4), new Vec2(1,0.5));
 
 
 
@@ -340,11 +351,15 @@ function initializeObjects()
         brickN11,
         brickN12
     ];
+
+    //maxNumBricks = bricksList.length;
+    maxNumBricks = bricksList.length;
+    currentNumBricks = maxNumBricks;
 }
 function initializeBallAndPaddle()
 {
     ball = new Ball(new Vec2(0, 16), new Vec2(0.3, 0.3));
-    paddle = new Paddle(new Vec2(0, 18), new Vec2(1.5, 0.25));
+    paddle = new Paddle(new Vec2(0, 17.75), new Vec2(1.5, 0.25));
 
     ball.hasChanged = true;   // forces redrawn
     paddle.hasChanged = true; // forces redrawn
@@ -358,30 +373,30 @@ function resetGame()
     initializeObjects(); // set up objects in the logical model
     forceUpdateMatrices(); // set up all the matrices from the previous initialized objects
     hasGameEnded = false;
-    lives = maxLives;
+    currentLives = maxLives;
+    currentNumBricks = maxNumBricks;
     updateScreenText();
 }
 
 function notifyBallDeath()
 {
-    if(lives>1)
+    initializeBallAndPaddle();
+    currentLives--;
+    if(currentLives>0)
     {
         // respawn ball
-        initializeBallAndPaddle();
-        lives--;
         updateScreenText();
     }
     else
     {
-        initializeBallAndPaddle();
-        lives--;
+        recordScore = currentScore;
+        currentScore = 0;
         hasGameEnded = true;
         updateScreenText();
         // stop receiving inputs
         window.removeEventListener("keydown", inputDown);
         window.removeEventListener("keyup", inputUp);
         inputDisabled = true;
-        // TODO SHOW ENDGAME RESULTS
     }
 }
 
@@ -409,7 +424,25 @@ function updateGameState()
             ball.checkAndHandleCollision(brick);
             if(brick.hasChanged) // brick disabled
             {
-                //todo manager brick counter and end game
+                currentNumBricks--;
+                currentScore+= 10;
+                if(currentNumBricks === 0)
+                {
+                    currentScore += currentLives * 5;
+                    recordScore = currentScore;
+                    currentScore = 0;
+                    initializeBallAndPaddle();
+                    hasGameEnded = true;
+                    updateScreenText();
+                    // stop receiving inputs
+                    window.removeEventListener("keydown", inputDown);
+                    window.removeEventListener("keyup", inputUp);
+                    inputDisabled = true;
+                }
+                else
+                {
+                    updateScreenText();
+                }
             }
         });
 
@@ -421,14 +454,12 @@ function updateGameState()
     }
 
     paddle.movePaddle(deltaTime);
-
-    // TODO IF ALL BRICKS SHOW ENDGAME RESULTS
 }
+
 
 //add listeners on key bindings to move objects
 window.addEventListener("keydown", inputDown);
 window.addEventListener("keyup", inputUp);
-
 window.addEventListener("keydown", reset);
 
 function inputDown(e) {
@@ -439,6 +470,14 @@ function inputDown(e) {
     if (e.key === "d" || e.key === "ArrowRight") {
         //move paddle to right
         paddle.moveRight = true;
+    }
+    if (e.key === "2")
+    {
+        PMatrix = utils.MakeProjection(gl.canvas.width/45, gl.canvas.width / gl.canvas.height, 1, 100);
+    }
+    if (e.key === "3")
+    {
+        PMatrix = utils.MakePerspective(45, gl.canvas.width / gl.canvas.height, 1, 100);
     }
 }
 

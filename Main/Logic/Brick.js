@@ -1,12 +1,12 @@
 class Brick 
 {
-    constructor(position, scale, canDeDisabled)
+    constructor(position, scale)
     {
         this.position = position;
         this.scale = scale;
         this.hasChanged = false;
 
-        this.canBeDisabled = canDeDisabled;
+        this.canBeDisabled = true;
         this.disabled = false;
         this.isPaddle = false;
     }
