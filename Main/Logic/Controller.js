@@ -26,7 +26,7 @@ let wallsList = null
 // objects list
 let objectsList = null;
 
-// input managmenet
+// input management
 let inputDisabled = false;
 
 function initializeObjects()
@@ -96,6 +96,9 @@ function resetGame()
 {
     initializeObjects(); // set up objects in the logical model
     forceUpdateMatrices(); // set up all the matrices from the previous initialized objects
+    hasGameEnded = false;
+    lives = maxLives;
+    updateScreenText();
 }
 
 function notifyBallDeath()
@@ -111,6 +114,7 @@ function notifyBallDeath()
     {
         initializeBallAndPaddle();
         lives--;
+        hasGameEnded = true;
         updateScreenText();
         // stop receiving inputs
         window.removeEventListener("keydown", inputDown);

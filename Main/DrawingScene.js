@@ -32,8 +32,9 @@ let meshes;
 //score variables
 let recordScore = 0;
 let currentScore = 0;
-let done = false;
-let lives = 3;
+let hasGameEnded = false;
+let maxLives = 1;
+let lives = 1;
 
 let textHandle = null;
 
@@ -55,7 +56,7 @@ function main()
 
 
     // directional light 
-    let directionalLightDirection = [0.0, -1.0, -1.0];
+    let directionalLightDirection = [0.0, 1.0, 0.0];
     let directionalLightColor = [1.0, 1.0, 1.0];
     // define ambient light and color
     let ambientLightColor = [1.0, 1.0, 1.0];
@@ -150,7 +151,8 @@ function main()
     function drawScene()
     {
         // clear the canvas
-        gl.clearColor(0.20, 0.20, 0.70, 1.0); // sets wallpaper color
+        //gl.clearColor(0.20, 0.20, 0.70, 1.0); // sets wallpaper color
+        gl.clearColor(0.0, 0.0, 0.0, 1); // sets wallpaper color
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
         // update game state, animations
@@ -202,13 +204,10 @@ async function init() {
     await loadShaders();
     await loadMeshes();
 
+    textHandle = document.getElementById("text");
     resetGame();
 
     main();
-
-    textHandle = document.getElementById("text");
-
-    updateScreenText();
 
     // prepare canvas and body styles
     function setupCanvas() {
@@ -276,11 +275,20 @@ window.onload = init;
 
 function updateScreenText()
 {
-
-    textHandle.innerHTML =
-        '    <h1 class="content" id="text">\n' +
-        '        Record  : ' + recordScore + '<br>\n' +
-        '        Current : ' + currentScore + '<br>\n' +
-        '        Lives : ' + lives +
-        '    </h1>';
+    if(!hasGameEnded)
+    {
+        textHandle.innerHTML =
+            '        Record  : ' + recordScore + '<br>\n' +
+            '        Current : ' + currentScore + '<br>\n' +
+            '        Lives : ' + lives + '<br>\n' +
+            '        Press enter to restart';
+    }
+    else
+    {
+        textHandle.innerHTML =
+            '        Record  : ' + recordScore + '<br>\n' +
+            '        Current : ' + currentScore + '<br>\n' +
+            '        Lives : ' + lives + '<br>\n' +
+            '        Game ended, press enter to restart';
+    }
 }

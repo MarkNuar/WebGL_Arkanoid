@@ -18,15 +18,17 @@
     width: 50%;
     height: 10%;
     top: 2%;
+    left: 10%;
     text-align: left;
     padding: 1vmin;
 }
 
 .rightDiv{
     position: absolute;
-    width: 98%;
+    width: 100%;
     height: 10%;
     top: 2%;
+    right: 10%;
     text-align: right;
     padding: 1vmin;
 }
@@ -44,7 +46,7 @@
 .content{
     height: 100%;
     margin: 0%;
-    font-size: 2.5vmin;
+    font-size: 2vmin;
     font-family: "Agency FB" ;
     color: white;
     opacity: 1.0;
