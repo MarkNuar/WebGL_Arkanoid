@@ -70,7 +70,7 @@ function main()
     texture = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, texture);
     let image = new Image();
-    image.src = baseDir + "Textures/textures.png";
+    image.src = baseDir + "Textures/col_textures.png";
     image.onload = function () {
         gl.bindTexture(gl.TEXTURE_2D, texture);
         gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
@@ -127,6 +127,8 @@ function main()
 
         arrayBuffer(mesh.vertices, 3, positionAttributeLocation);
         arrayBuffer(mesh.textures, 2, uvAttributeLocation);
+
+        console.log(mesh.textures);
         arrayBuffer(mesh.vertexNormals, 3, normalAttributeLocation);
 
         indexBuffer(mesh.indices);
@@ -248,11 +250,11 @@ async function init() {
         wallMeshR = await utils.loadMesh(modelsDir + "Wall.obj");
         wallMeshL = await utils.loadMesh(modelsDir + "Wall.obj");
         wallMeshU = await utils.loadMesh(modelsDir + "Wall.obj");
-        brickMesh0 = await utils.loadMesh(modelsDir + "Brick.obj");
-        brickMesh1 = await utils.loadMesh(modelsDir + "Brick.obj");
-        brickMesh2 = await utils.loadMesh(modelsDir + "Brick.obj");
-        brickMesh3 = await utils.loadMesh(modelsDir + "Brick.obj");
-        brickMesh4 = await utils.loadMesh(modelsDir + "Brick.obj");
+        brickMesh0 = await utils.loadMesh(modelsDir + "BrickY.obj");
+        brickMesh1 = await utils.loadMesh(modelsDir + "BrickG.obj");
+        brickMesh2 = await utils.loadMesh(modelsDir + "BrickN.obj");
+        brickMesh3 = await utils.loadMesh(modelsDir + "BrickP.obj");
+        brickMesh4 = await utils.loadMesh(modelsDir + "BrickR.obj");
 
         meshes = [
             ballMesh,
