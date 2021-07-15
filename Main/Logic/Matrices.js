@@ -5,8 +5,7 @@ let currentMatricesList = [];
  * remember that moving and scaling on y for the object in the controller
  * must result in a movement and scaling on the z for the matrix
  ***/
-function updateMatrices()
-{
+function updateMatrices() {
     for(let i = 0; i < objectsList.length; i++)
     {
         let currentObject = objectsList[i];
@@ -18,8 +17,7 @@ function updateMatrices()
 }
 
 // probably needed for restoring game to the initial view
-function forceUpdateMatrices()
-{
+function forceUpdateMatrices() {
     for(let i = 0; i < objectsList.length; i++)
     {
         let currentObject = objectsList[i];
@@ -27,8 +25,7 @@ function forceUpdateMatrices()
     }
 }
 
-function updateMatrix(object, index)
-{
+function updateMatrix(object, index) {
     currentMatricesList[index] = utils.createGenericWorldMatrix(
         object.position.x,
         0, // always zero for this project

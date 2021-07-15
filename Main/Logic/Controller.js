@@ -12,8 +12,6 @@ let currentLives = 3;
 let maxNumBricks = 0;
 let currentNumBricks = 0;
 
-
-
 // ball
 let ball = null;
 
@@ -34,8 +32,7 @@ let objectsList = [];
 // input management
 let inputDisabled = false;
 
-function initializeObjects()
-{
+function initializeObjects() {
     /**
      * x goes from right to left
      * y goes from up to down
@@ -68,8 +65,8 @@ function initializeObjects()
     maxNumBricks = bricksList.length;
     currentNumBricks = maxNumBricks;
 }
-function initializeBallAndPaddle()
-{
+
+function initializeBallAndPaddle() {
     ball = new Ball(new Vec2(0, 16), new Vec2(0.3, 0.3));
     paddle = new Paddle(new Vec2(0, 17.75), new Vec2(1.5, 0.25));
 
@@ -80,8 +77,7 @@ function initializeBallAndPaddle()
     objectsList[1] = paddle;
 }
 
-function resetGame()
-{
+function resetGame() {
     initializeObjects(); // set up objects in the logical model
     forceUpdateMatrices(); // set up all the matrices from the previous initialized objects
     hasGameEnded = false;
@@ -90,8 +86,7 @@ function resetGame()
     updateScreenText();
 }
 
-function notifyBallDeath()
-{
+function notifyBallDeath() {
     initializeBallAndPaddle();
     currentLives--;
     if(currentLives>0)
@@ -113,8 +108,7 @@ function notifyBallDeath()
 }
 
 // function to update the game state
-function updateGameState()
-{
+function updateGameState() {
     // update delta time 
     currentTime = (new Date).getTime();
     deltaTime = currentTime - lastUpdateTime;
@@ -185,7 +179,7 @@ function inputDown(e) {
     }
 }
 
-function reset(e){
+function reset(e) {
     if (e.keyCode === 13) { // press enter
         resetGame();
         if(inputDisabled)
@@ -208,8 +202,7 @@ function inputUp(e) {
     }
 }
 
-function onCheckBoxChange(value)
-{
+function onCheckBoxChange(value) {
     if(value)
     {
         PMatrix = utils.MakePerspective(45, gl.canvas.width / gl.canvas.height, 1, 100);

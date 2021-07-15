@@ -1,5 +1,4 @@
-class Paddle 
-{
+class Paddle {
     constructor(position, scale)
     {
         this.position = position;

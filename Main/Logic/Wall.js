@@ -1,5 +1,4 @@
-class Wall 
-{
+class Wall {
     constructor(position, scale)
     {
         this.position = position;

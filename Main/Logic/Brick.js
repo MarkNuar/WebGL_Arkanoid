@@ -1,5 +1,4 @@
-class Brick 
-{
+class Brick {
     constructor(position, scale)
     {
         this.position = position;

@@ -1,5 +1,4 @@
-class Ball 
-{
+class Ball {
     constructor(position, scale)
     {
         this.position = position;
