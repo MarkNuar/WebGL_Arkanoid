@@ -83,6 +83,7 @@ function resetGame() {
     hasGameEnded = false;
     currentLives = maxLives;
     currentNumBricks = maxNumBricks;
+    currentScore = 0;
     updateScreenText();
 }
 
