@@ -20,87 +20,16 @@ let ball = null;
 // paddle
 let paddle = null;
 
-// bricks
-let brickY0 = null;
-let brickY1 = null;
-let brickY2 = null;
-let brickY3 = null;
-let brickY4 = null;
-let brickY5 = null;
-let brickY6 = null;
-let brickY7 = null;
-let brickY8 = null;
-let brickY9 = null;
-let brickY10 = null;
-let brickY11 = null;
-let brickY12 = null;
-
-let brickG0 = null;
-let brickG1 = null;
-let brickG2 = null;
-let brickG3 = null;
-let brickG4 = null;
-let brickG5 = null;
-let brickG6 = null;
-let brickG7 = null;
-let brickG8 = null;
-let brickG9 = null;
-let brickG10 = null;
-let brickG11 = null;
-let brickG12 = null;
-
-let brickP0 = null;
-let brickP1 = null;
-let brickP2 = null;
-let brickP3 = null;
-let brickP4 = null;
-let brickP5 = null;
-let brickP6 = null;
-let brickP7 = null;
-let brickP8 = null;
-let brickP9 = null;
-let brickP10 = null;
-let brickP11 = null;
-let brickP12 = null;
-
-let brickR0 = null;
-let brickR1 = null;
-let brickR2 = null;
-let brickR3 = null;
-let brickR4 = null;
-let brickR5 = null;
-let brickR6 = null;
-let brickR7 = null;
-let brickR8 = null;
-let brickR9 = null;
-let brickR10 = null;
-let brickR11 = null;
-let brickR12 = null;
-
-let brickN0 = null;
-let brickN1 = null;
-let brickN2 = null;
-let brickN3 = null;
-let brickN4 = null;
-let brickN5 = null;
-let brickN6 = null;
-let brickN7 = null;
-let brickN8 = null;
-let brickN9 = null;
-let brickN10 = null;
-let brickN11 = null;
-let brickN12 = null;
-
-let bricksList = null;
+let bricksList = [];
 
 // walls
 let wallR = null;
 let wallL = null;
 let wallU = null;
-let wallsList = null
+let wallsList = [];
 
 // objects list
-let objectsList = null;
+let objectsList = [];
 
 // input management
 let inputDisabled = false;
@@ -112,248 +41,30 @@ function initializeObjects()
      * y goes from up to down
      */
 
+    objectsList = []; // reset if restarting game
+
     ball = new Ball(new Vec2(0, 16), new Vec2(0.3, 0.3));
     paddle = new Paddle(new Vec2(0, 17.75), new Vec2(1.5, 0.25));
-    paddle2 = new Paddle(new Vec2(5, 17.75), new Vec2(1.5, 0.25));
-
     wallR = new Wall(new Vec2(-15, 4), new Vec2(0.5, 14));
     wallL = new Wall(new Vec2(15, 4), new Vec2(0.5, 14));
     wallU = new Wall(new Vec2(0, -9.5), new Vec2(15, 0.5));
 
-    brickG0 = new Brick(new Vec2(0,0), new Vec2(1,0.5));
-    brickG1 = new Brick(new Vec2(-2.1,0), new Vec2(1,0.5));
-    brickG2 = new Brick(new Vec2(-4.2,0), new Vec2(1,0.5));
-    brickG3 = new Brick(new Vec2(-6.3,0), new Vec2(1,0.5));
-    brickG4 = new Brick(new Vec2(-8.4,0), new Vec2(1,0.5));
-    brickG5 = new Brick(new Vec2(-10.5, 0), new Vec2(1,0.5));
-    brickG6 = new Brick(new Vec2(-12.6,0), new Vec2(1,0.5));
-    brickG7 = new Brick(new Vec2(2.1,0), new Vec2(1,0.5));
-    brickG8 = new Brick(new Vec2(4.2,0), new Vec2(1,0.5));
-    brickG9 = new Brick(new Vec2(6.3,0), new Vec2(1,0.5));
-    brickG10 = new Brick(new Vec2(8.4,0), new Vec2(1,0.5));
-    brickG11 = new Brick(new Vec2(10.5,0), new Vec2(1,0.5));
-    brickG12 = new Brick(new Vec2(12.6,0), new Vec2(1,0.5));
+    objectsList.push(ball, paddle, wallR, wallL, wallU);
 
-    brickP0 = new Brick(new Vec2(0,-1.1), new Vec2(1,0.5));
-    brickP1 = new Brick(new Vec2(-2.1,-1.1), new Vec2(1,0.5));
-    brickP2 = new Brick(new Vec2(-4.2,-1.1), new Vec2(1,0.5));
-    brickP3 = new Brick(new Vec2(-6.3,-1.1), new Vec2(1,0.5));
-    brickP4 = new Brick(new Vec2(-8.4,-1.1), new Vec2(1,0.5));
-    brickP5 = new Brick(new Vec2(-10.5, -1.1), new Vec2(1,0.5));
-    brickP6 = new Brick(new Vec2(-12.6,-1.1), new Vec2(1,0.5));
-    brickP7 = new Brick(new Vec2(2.1,-1.1), new Vec2(1,0.5));
-    brickP8 = new Brick(new Vec2(4.2,-1.1), new Vec2(1,0.5));
-    brickP9 = new Brick(new Vec2(6.3,-1.1), new Vec2(1,0.5));
-    brickP10 = new Brick(new Vec2(8.4,-1.1), new Vec2(1,0.5));
-    brickP11 = new Brick(new Vec2(10.5,-1.1), new Vec2(1,0.5));
-    brickP12 = new Brick(new Vec2(12.6,-1.1), new Vec2(1,0.5));
+    let xStart = -12.6;
+    let xStep = 2.1;
+    let yStep = 1.1;
+    for (let j = 0; j < 5; j++)
+    {
+        for (let i = 0; i < 13; i++)
+        {
+            objectsList.push(new Brick(new Vec2(xStart+xStep*i, -yStep*j), new Vec2(1, 0.5)));
+        }
+    }
 
-    brickY0 = new Brick(new Vec2(0,-2.2), new Vec2(1,0.5));
-    brickY1 = new Brick(new Vec2(-2.1,-2.2), new Vec2(1,0.5));
-    brickY2 = new Brick(new Vec2(-4.2,-2.2), new Vec2(1,0.5));
-    brickY3 = new Brick(new Vec2(-6.3,-2.2), new Vec2(1,0.5));
-    brickY4 = new Brick(new Vec2(-8.4,-2.2), new Vec2(1,0.5));
-    brickY5 = new Brick(new Vec2(-10.5, -2.2), new Vec2(1,0.5));
-    brickY6 = new Brick(new Vec2(-12.6,-2.2), new Vec2(1,0.5));
-    brickY7 = new Brick(new Vec2(2.1,-2.2), new Vec2(1,0.5));
-    brickY8 = new Brick(new Vec2(4.2,-2.2), new Vec2(1,0.5));
-    brickY9 = new Brick(new Vec2(6.3,-2.2), new Vec2(1,0.5));
-    brickY10 = new Brick(new Vec2(8.4,-2.2), new Vec2(1,0.5));
-    brickY11 = new Brick(new Vec2(10.5,-2.2), new Vec2(1,0.5));
-    brickY12 = new Brick(new Vec2(12.6,-2.2), new Vec2(1,0.5));
+    wallsList = objectsList.slice(2, 5);
+    bricksList = objectsList.slice(5, objectsList.length);
 
-    brickR0 = new Brick(new Vec2(0,-3.3), new Vec2(1,0.5));
-    brickR1 = new Brick(new Vec2(-2.1,-3.3), new Vec2(1,0.5));
-    brickR2 = new Brick(new Vec2(-4.2,-3.3), new Vec2(1,0.5));
-    brickR3 = new Brick(new Vec2(-6.3,-3.3), new Vec2(1,0.5));
-    brickR4 = new Brick(new Vec2(-8.4,-3.3), new Vec2(1,0.5));
-    brickR5 = new Brick(new Vec2(-10.5, -3.3), new Vec2(1,0.5));
-    brickR6 = new Brick(new Vec2(-12.6,-3.3), new Vec2(1,0.5));
-    brickR7 = new Brick(new Vec2(2.1,-3.3), new Vec2(1,0.5));
-    brickR8 = new Brick(new Vec2(4.2,-3.3), new Vec2(1,0.5));
-    brickR9 = new Brick(new Vec2(6.3,-3.3), new Vec2(1,0.5));
-    brickR10 = new Brick(new Vec2(8.4,-3.3), new Vec2(1,0.5));
-    brickR11 = new Brick(new Vec2(10.5,-3.3), new Vec2(1,0.5));
-    brickR12 = new Brick(new Vec2(12.6,-3.3), new Vec2(1,0.5));
-
-    brickN0 = new Brick(new Vec2(0,-4.4), new Vec2(1,0.5));
-    brickN1 = new Brick(new Vec2(-2.1,-4.4), new Vec2(1,0.5));
-    brickN2 = new Brick(new Vec2(-4.2,-4.4), new Vec2(1,0.5));
-    brickN3 = new Brick(new Vec2(-6.3,-4.4), new Vec2(1,0.5));
-    brickN4 = new Brick(new Vec2(-8.4,-4.4), new Vec2(1,0.5));
-    brickN5 = new Brick(new Vec2(-10.5, -4.4), new Vec2(1,0.5));
-    brickN6 = new Brick(new Vec2(-12.6,-4.4), new Vec2(1,0.5));
-    brickN7 = new Brick(new Vec2(2.1,-4.4), new Vec2(1,0.5));
-    brickN8 = new Brick(new Vec2(4.2,-4.4), new Vec2(1,0.5));
-    brickN9 = new Brick(new Vec2(6.3,-4.4), new Vec2(1,0.5));
-    brickN10 = new Brick(new Vec2(8.4,-4.4), new Vec2(1,0.5));
-    brickN11 = new Brick(new Vec2(10.5,-4.4), new Vec2(1,0.5));
-    brickN12 = new Brick(new Vec2(12.6,-4.4), new Vec2(1,0.5));
-
-
-
-
-    objectsList = [
-        ball,
-        paddle,
-        wallR,
-        wallL,
-        wallU,
-
-        brickG0,
-        brickG1,
-        brickG2,
-        brickG3,
-        brickG4,
-        brickG5,
-        brickG6,
-        brickG7,
-        brickG8,
-        brickG9,
-        brickG10,
-        brickG11,
-        brickG12,
-
-        brickP0,
-        brickP1,
-        brickP2,
-        brickP3,
-        brickP4,
-        brickP5,
-        brickP6,
-        brickP7,
-        brickP8,
-        brickP9,
-        brickP10,
-        brickP11,
-        brickP12,
-
-        brickY0,
-        brickY1,
-        brickY2,
-        brickY3,
-        brickY4,
-        brickY5,
-        brickY6,
-        brickY7,
-        brickY8,
-        brickY9,
-        brickY10,
-        brickY11,
-        brickY12,
-
-        brickR0,
-        brickR1,
-        brickR2,
-        brickR3,
-        brickR4,
-        brickR5,
-        brickR6,
-        brickR7,
-        brickR8,
-        brickR9,
-        brickR10,
-        brickR11,
-        brickR12,
-
-        brickN0,
-        brickN1,
-        brickN2,
-        brickN3,
-        brickN4,
-        brickN5,
-        brickN6,
-        brickN7,
-        brickN8,
-        brickN9,
-        brickN10,
-        brickN11,
-        brickN12
-
-
-
-        // add other bricks ...
-    ];
-
-    wallsList = [
-        wallR,
-        wallL,
-        wallU
-    ];
-
-    bricksList = [
-        brickG0,
-        brickG1,
-        brickG2,
-        brickG3,
-        brickG4,
-        brickG5,
-        brickG6,
-        brickG7,
-        brickG8,
-        brickG9,
-        brickG10,
-        brickG11,
-        brickG12,
-
-        brickP0,
-        brickP1,
-        brickP2,
-        brickP3,
-        brickP4,
-        brickP5,
-        brickP6,
-        brickP7,
-        brickP8,
-        brickP9,
-        brickP10,
-        brickP11,
-        brickP12,
-
-        brickY0,
-        brickY1,
-        brickY2,
-        brickY3,
-        brickY4,
-        brickY5,
-        brickY6,
-        brickY7,
-        brickY8,
-        brickY9,
-        brickY10,
-        brickY11,
-        brickY12,
-
-        brickR0,
-        brickR1,
-        brickR2,
-        brickR3,
-        brickR4,
-        brickR5,
-        brickR6,
-        brickR7,
-        brickR8,
-        brickR9,
-        brickR10,
-        brickR11,
-        brickR12,
-
-        brickN0,
-        brickN1,
-        brickN2,
-        brickN3,
-        brickN4,
-        brickN5,
-        brickN6,
-        brickN7,
-        brickN8,
-        brickN9,
-        brickN10,
-        brickN11,
-        brickN12
-    ];
-
-    //maxNumBricks = bricksList.length;
     maxNumBricks = bricksList.length;
     currentNumBricks = maxNumBricks;
 }
@@ -361,7 +72,6 @@ function initializeBallAndPaddle()
 {
     ball = new Ball(new Vec2(0, 16), new Vec2(0.3, 0.3));
     paddle = new Paddle(new Vec2(0, 17.75), new Vec2(1.5, 0.25));
-    paddle2 = new Paddle(new Vec2(5, 17.75), new Vec2(1.5, 0.25));
 
     ball.hasChanged = true;   // forces redrawn
     paddle.hasChanged = true; // forces redrawn
@@ -419,8 +129,6 @@ function updateGameState()
 
     if(ball.moving)
     {
-        ball.moveBall(deltaTime);
-
         // loop over all objects in level and check collision with them
         bricksList.forEach(brick => {
             ball.checkAndHandleCollision(brick);
@@ -453,6 +161,8 @@ function updateGameState()
         });
 
         ball.checkAndHandleCollision(paddle);
+
+        ball.moveBall(deltaTime);
     }
 
     paddle.movePaddle(deltaTime);
