@@ -2,15 +2,6 @@
 
 var utils = {
 
-	createAndCompileShaders: function (gl, shaderText) {
-		var vertexShader = utils.createShader(gl, gl.VERTEX_SHADER, shaderText[0]);
-		var fragmentShader = utils.createShader(gl, gl.FRAGMENT_SHADER, shaderText[1]);
-
-		var program = utils.createProgram(gl, vertexShader, fragmentShader);
-
-		return program;
-	},
-
 	createShader: function (gl, type, source) {
 		var shader = gl.createShader(type);
 		gl.shaderSource(shader, source);
@@ -58,19 +49,6 @@ var utils = {
 		window.addEventListener('resize', expandFullScreen);
 	},
 
-	// **** MODEL UTILS ****
-
-	// Function to load a 3D model in JSON format
-	get_json: async function (url, func) {
-		var response = await fetch(url);
-		if (!response.ok) {
-			alert('Network response was not ok');
-			return;
-		}
-		var json = await response.json();
-		func(json);
-	},
-
 	get_objstr: async function (url) {
 		var response = await fetch(url);
 		if (!response.ok) {
@@ -88,32 +66,6 @@ var utils = {
 		return mesh;
 	  },
 
-	// Function to convert decimal value of colors 
-	decimalToHex: function (d, padding) {
-		var hex = Number(d).toString(16);
-		padding = typeof (padding) === "undefined" || padding === null ? padding = 2 : padding;
-
-		while (hex.length < padding) {
-			hex = "0" + hex;
-		}
-
-		return hex;
-	},
-
-	// **** SHADERS UTILS ****
-
-	/*fetch('http://foo.com/static/bar.glsl') .then(response => {
-		if (!response.ok) {
-		alert('Network response was not ok');
-		}
-		return response.text();
-  	}).then(data => console.log(data));*/
-
-	/*
-		Function to load a shader's code, compile it and return the handle to it
-		Requires:
-			path to the shader's text (url)
-	*/
 	loadFile: async function (url, data, callback, errorCallBack) {
 		var response = await fetch(url);
 		if (!response.ok) {
@@ -123,26 +75,6 @@ var utils = {
 		var text = await response.text();
 		callback(text, data);
 	},
-
-	/*loadFile: function (url, data, callback, errorCallback) {
-		// Set up a synchronous request! Important!
-		var request = new XMLHttpRequest();
-		//The third parameter set to false makes the request synchronous
-		request.open('GET', url, false);
-	
-		// Hook the event that gets called as the request progresses
-		request.onreadystatechange = function () {
-			// If the request is "DONE" (completed or failed) and if we got HTTP status 200 (OK)
-			if (request.readyState == 4 && request.status == 200) {
-					callback(request.responseText, data)
-				//} else { // Failed
-				//	errorCallback(url);
-			}
-			
-		};
-	
-		request.send(null);    
-	},*/
 
 	loadFiles: async function (urls, callback, errorCallback) {
 		var numUrls = urls.length;
@@ -163,111 +95,6 @@ var utils = {
 		for (var i = 0; i < numUrls; i++) {
 			await this.loadFile(urls[i], i, partialCallback, errorCallback);
 		}
-	},
-
-	/*loadFiles: function (urls, gl, callback, errorCallback) {
-		var numUrls = urls.length;
-		var numComplete = 0;
-		var result = [];
-
-		// Callback for a single file
-		function partialCallback(text, urlIndex) {
-			result[urlIndex] = text;
-			numComplete++;
-
-			// When all files have downloaded
-			if (numComplete == numUrls) {
-				callback(gl, result);
-			}
-		}
-
-		for (var i = 0; i < numUrls; i++) {
-			this.loadFile(urls[i], i, partialCallback, errorCallback);
-		}
-	},*/
-
-	// **** TEXTURE UTILS (to solve problems with non power of 2 textures in webGL) ****
-
-	getTexture: function (context, image_URL) {
-		var image = new Image();
-		image.webglTexture = false;
-		image.isLoaded = false;
-
-		image.onload = function (e) {
-
-			var texture = context.createTexture();
-
-			context.bindTexture(context.TEXTURE_2D, texture);
-
-			context.texImage2D(context.TEXTURE_2D, 0, context.RGBA, context.RGBA, context.UNSIGNED_BYTE, image);
-			//context.pixelStorei(context.UNPACK_FLIP_Y_WEBGL, 1);
-			context.texParameteri(context.TEXTURE_2D, context.TEXTURE_WRAP_S, context.CLAMP_TO_EDGE);
-			context.texParameteri(context.TEXTURE_2D, context.TEXTURE_WRAP_T, context.CLAMP_TO_EDGE);
-			context.texParameteri(context.TEXTURE_2D, context.TEXTURE_MAG_FILTER, context.LINEAR);
-			context.texParameteri(context.TEXTURE_2D, context.TEXTURE_MIN_FILTER, context.NEAREST_MIPMAP_LINEAR);
-			context.generateMipmap(context.TEXTURE_2D);
-
-			context.bindTexture(context.TEXTURE_2D, null);
-			image.webglTexture = texture;
-			image.isLoaded = true;
-		};
-
-		image.src = image_URL;
-
-		return image;
-	},
-
-	isPowerOfTwo: function (x) {
-		return (x & (x - 1)) == 0;
-	},
-
-	nextHighestPowerOfTwo: function (x) {
-		--x;
-		for (var i = 1; i < 32; i <<= 1) {
-			x = x | x >> i;
-		}
-		return x + 1;
-	},
-
-	// **** INTERACTION UTILS ****
-	
-	initInteraction: function () {
-		var keyFunction = function (e) {
-
-			if (e.keyCode == 37) {	// Left arrow
-				cx -= delta;
-			}
-			if (e.keyCode == 39) {	// Right arrow
-				cx += delta;
-			}
-			if (e.keyCode == 38) {	// Up arrow
-				cz -= delta;
-			}
-			if (e.keyCode == 40) {	// Down arrow
-				cz += delta;
-			}
-			if (e.keyCode == 107) {	// Add
-				cy += delta;
-			}
-			if (e.keyCode == 109) {	// Subtract
-				cy -= delta;
-			}
-
-			if (e.keyCode == 65) {	// a
-				angle -= delta * 10.0;
-			}
-			if (e.keyCode == 68) {	// d
-				angle += delta * 10.0;
-			}
-			if (e.keyCode == 87) {	// w
-				elevation += delta * 10.0;
-			}
-			if (e.keyCode == 83) {	// s
-				elevation -= delta * 10.0;
-			}
-		}
-		// 'window' is a JavaScript object (if "canvas", it will not work)
-		window.addEventListener("keyup", keyFunction, false);
 	},
 
 	// **** MATH LIBRARY ****

@@ -34,7 +34,7 @@ function updateMatrix(object, index) {
         0, // always zero for this project
         0, // always zero for this project
         object.scale.x,
-        1, // always one for this project
+        0.5, // always one for this project
         object.scale.y
     );
     object.hasChanged = false;

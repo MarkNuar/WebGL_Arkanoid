@@ -40,22 +40,23 @@ function initializeObjects() {
 
     objectsList = []; // reset if restarting game
 
-    ball = new Ball(new Vec2(0, 16), new Vec2(0.3, 0.3));
-    paddle = new Paddle(new Vec2(0, 17.75), new Vec2(1.5, 0.25));
-    wallR = new Wall(new Vec2(-15, 4), new Vec2(0.5, 14));
-    wallL = new Wall(new Vec2(15, 4), new Vec2(0.5, 14));
-    wallU = new Wall(new Vec2(0, -9.5), new Vec2(15, 0.5));
+    ball = new Ball(new Vec2(0, 14), new Vec2(0.3, 0.3));
+    paddle = new Paddle(new Vec2(0, 15.75), new Vec2(1.5, 0.25));
+    wallR = new Wall(new Vec2(-15, 2), new Vec2(0.5, 14));
+    wallL = new Wall(new Vec2(15, 2), new Vec2(0.5, 14));
+    wallU = new Wall(new Vec2(0, -11.5), new Vec2(15, 0.5));
 
     objectsList.push(ball, paddle, wallR, wallL, wallU);
 
     let xStart = -12.6;
     let xStep = 2.1;
+    let yStart = 2;
     let yStep = 1.1;
     for (let j = 0; j < 5; j++)
     {
         for (let i = 0; i < 13; i++)
         {
-            objectsList.push(new Brick(new Vec2(xStart+xStep*i, -yStep*j), new Vec2(1, 0.5)));
+            objectsList.push(new Brick(new Vec2(xStart+xStep*i, -yStart-yStep*j), new Vec2(1, 0.5)));
         }
     }
 
@@ -67,8 +68,8 @@ function initializeObjects() {
 }
 
 function initializeBallAndPaddle() {
-    ball = new Ball(new Vec2(0, 16), new Vec2(0.3, 0.3));
-    paddle = new Paddle(new Vec2(0, 17.75), new Vec2(1.5, 0.25));
+    ball = new Ball(new Vec2(0, 14), new Vec2(0.3, 0.3));
+    paddle = new Paddle(new Vec2(0, 15.75), new Vec2(1.5, 0.25));
 
     ball.hasChanged = true;   // forces redrawn
     paddle.hasChanged = true; // forces redrawn
@@ -206,10 +207,18 @@ function inputUp(e) {
 function onCheckBoxChange(value) {
     if(value)
     {
+        ThreeDOn = true;
         PMatrix = utils.MakePerspective(45, gl.canvas.width / gl.canvas.height, 1, 100);
     }
     else
     {
+        ThreeDOn = false;
         PMatrix = utils.MakeProjection(gl.canvas.width/45, gl.canvas.width / gl.canvas.height, 1, 100);
+        cx = 0;
+        cy = 50;
+        cz = 0;
+        elev = -90;
+        ang = 0;
+        lookRadius = 50.0;
     }
 }

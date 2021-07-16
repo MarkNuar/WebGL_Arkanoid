@@ -62,6 +62,10 @@ class Ball {
 
         if(difference.getModule() < ballRadius)
         {
+            if(difference.getModule() === 0)
+            {
+                console.error("Zero vector for different");
+            }
             console.log(otherObject.disabled);
             this.handleCollision(otherObject, difference);
         }

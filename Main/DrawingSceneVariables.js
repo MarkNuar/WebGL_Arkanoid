@@ -8,9 +8,16 @@ let modelsDir;
 //camera variables
 let cx = 0;
 let cy = 50;
-let cz = 3;
+let cz = 0;
 let elev = -90;
 let ang = 0;
+let lookRadius = 50.0;
+
+let ThreeDOn = false;
+
+let mouseState = false;
+let lastMouseX = -100, lastMouseY = -100;
+
 
 // meshes
 let ballMesh;
