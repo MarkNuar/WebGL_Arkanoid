@@ -9,8 +9,10 @@ async function init() {
     await loadShaders();
     await loadMeshes();
 
-    textHandle = document.getElementById("text");
+    textScoreHandle = document.getElementById("text");
     gameOverTextHandle = document.getElementById("gameOver");
+    gameOverDiv = document.getElementById("gameOverDiv");
+
 
     resetGame();
 
@@ -227,7 +229,7 @@ async function loadMeshes(){
 }
 
 function updateScreenText(){
-    textHandle.innerHTML =
+    textScoreHandle.innerHTML =
         '        Score   : ' + currentScore + '<br>\n' +
         '        Record  : ' + recordScore + '<br>\n' +
         '        Lives   : ' + currentLives + '<br>\n' +
@@ -235,6 +237,7 @@ function updateScreenText(){
 
     if(hasGameEnded)
     {
+        gameOverDiv.style = "display: block"
         gameOverTextHandle.innerHTML =
             '        Game Over ' + '<br>\n' +
             '        Score   : ' + currentScore + '<br>\n' +
@@ -243,6 +246,6 @@ function updateScreenText(){
     }
     else
     {
-        gameOverTextHandle.innerHTML = '';
+        gameOverDiv.style = "display: none"
     }
 }

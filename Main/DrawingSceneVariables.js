@@ -31,8 +31,9 @@ let wallMeshU;
 let meshes = null;
 
 // reference to text in html file
-let textHandle = null;
+let textScoreHandle = null;
 let gameOverTextHandle = null;
+let gameOverDiv = null;
 
 // texture variable
 let texture;
