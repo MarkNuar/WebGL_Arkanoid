@@ -1,6 +1,8 @@
 const BALL_SPEED = 0.015;
 
-const PADDLE_SPEED = 0.012;
+const BALL_RADIUS = 0.5;
+
+const PADDLE_SPEED = 0.013;
 
 const PADDLE_WALL_PADDING = 0.3;
 

@@ -4,6 +4,7 @@ let gl;
 let baseDir;
 let shaderDir;
 let modelsDir;
+let canvas
 
 //camera variables
 let cx = 0;

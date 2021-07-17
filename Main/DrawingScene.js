@@ -5,6 +5,7 @@ async function init() {
     // maybe add music
 
     setupCanvas();
+    setUpMouseControls();
     await loadShaders();
     await loadMeshes();
 
@@ -61,7 +62,7 @@ function main(){
     textureHandle = gl.getUniformLocation(program, "in_texture");
 
     // perspective matrix
-    PMatrix = utils.MakeProjection(gl.canvas.width/45, gl.canvas.width / gl.canvas.height, 1, 100);
+    PMatrix = utils.MakeOrthogonal(gl.canvas.width/41, gl.canvas.width / gl.canvas.height, 1, 100);
     //PMatrix = utils.MakePerspective(45, gl.canvas.width / gl.canvas.height, 1, 100);
 
     // vertex array objects
@@ -160,7 +161,7 @@ function indexBuffer(elements){
 
 // prepare canvas and body styles
 function setupCanvas(){
-    let canvas = document.getElementById("canvas");
+    canvas = document.getElementById("canvas");
     gl = canvas.getContext("webgl2");
 
     if (!gl) {
@@ -170,11 +171,6 @@ function setupCanvas(){
     utils.resizeCanvasToDisplaySize(canvas);
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
-    // add mouse controls for 3D movement
-    canvas.addEventListener("mousedown", doMouseDown, false);
-    canvas.addEventListener("mouseup", doMouseUp, false);
-    canvas.addEventListener("mousemove", doMouseMove, false);
-    canvas.addEventListener("mousewheel", doMouseWheel, false);
 }
 
 //load shaders
@@ -241,35 +237,3 @@ function updateScreenText(){
 }
 
 
-function doMouseDown(event) {
-    lastMouseX = event.pageX;
-    lastMouseY = event.pageY;
-    mouseState = true;
-}
-function doMouseUp() {
-    lastMouseX = -100;
-    lastMouseY = -100;
-    mouseState = false;
-}
-function doMouseMove(event) {
-    if(mouseState && ThreeDOn) {
-        let dx = event.pageX - lastMouseX;
-        let dy = lastMouseY - event.pageY;
-        lastMouseX = event.pageX;
-        lastMouseY = event.pageY;
-
-        if((dx !== 0) || (dy !== 0)) {
-            ang = ang + 0.5 * dx;
-            elev = elev + 0.5 * dy;
-        }
-    }
-}
-function doMouseWheel(event) {
-    if(ThreeDOn)
-    {
-        let nLookRadius = lookRadius + event.wheelDelta/250.0;
-        if((nLookRadius > 10.0) && (nLookRadius < 75.0)) {
-            lookRadius = nLookRadius;
-        }
-    }
-}

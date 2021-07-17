@@ -487,7 +487,7 @@ var utils = {
 		return perspective;
 	},
 
-	MakeProjection: function(w, a, n, f)
+	MakeOrthogonal: function(w, a, n, f)
 	{
 		let perspective = this.identityMatrix();
 

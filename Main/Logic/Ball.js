@@ -11,17 +11,12 @@ class Ball {
         this.moving = false;
     }
 
-    initialBallVelocity;
-    startAngleDeg;
-    startAngleRad;
-    
+
     startMoving() 
     {
         this.moving = true;
-        this.startAngleDeg = 90*Math.random() + 225;
-        this.startAngleRad = utils.degToRad(this.startAngleDeg);
-        this.velocity = new Vec2(Math.cos(this.startAngleRad),Math.sin(this.startAngleRad));
-        this.initialBallVelocity = this.velocity;
+        let angle =  utils.degToRad(90*Math.random() + 225);
+        this.velocity = new Vec2(Math.cos(angle),Math.sin(angle));
         this.velocity.scale(this.speed);
     }
 
@@ -46,17 +41,17 @@ class Ball {
         let ballPosition = this.position;
         let ballRadius = this.radius;
 
-        let aabbhalfExtents = new Vec2(otherObject.scale.x, otherObject.scale.y);
-        let aabbPosition = otherObject.position;
+        let otherHalfExtents = new Vec2(otherObject.scale.x, otherObject.scale.y);
+        let otherPosition = otherObject.position;
 
-        let difference = new Vec2(ballPosition.x - aabbPosition.x, ballPosition.y - aabbPosition.y);
+        let difference = new Vec2(ballPosition.x - otherPosition.x, ballPosition.y - otherPosition.y);
 
         let clamped = new Vec2(
-            this.clamp(difference.x, -aabbhalfExtents.x, aabbhalfExtents.x),
-            this.clamp(difference.y, -aabbhalfExtents.y, aabbhalfExtents.y)
+            this.clamp(difference.x, -otherHalfExtents.x, otherHalfExtents.x),
+            this.clamp(difference.y, -otherHalfExtents.y, otherHalfExtents.y)
         );
         
-        let closest = aabbPosition.add(clamped);
+        let closest = otherPosition.add(clamped);
 
         difference = closest.sub(ballPosition);
 
@@ -76,7 +71,11 @@ class Ball {
         if(otherObject.isPaddle) // just hit the player
         {
             this.velocity.y = - this.velocity.y;
-            this.velocity.x += (this.position.x - otherObject.position.x)/5; // it's a kind of magic
+            this.velocity.x += (this.position.x - otherObject.position.x)/2; // it's a kind of magic
+            if(Math.abs(this.velocity.x) > 1.5 * Math.abs(this.velocity.y))
+            {
+                this.velocity.x = this.velocity.x/4;
+            }
             this.velocity = this.velocity.normalize();
         }
         else // just hit a brick or wall

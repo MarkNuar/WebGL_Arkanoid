@@ -40,11 +40,11 @@ function initializeObjects() {
 
     objectsList = []; // reset if restarting game
 
-    ball = new Ball(new Vec2(0, 14), new Vec2(0.3, 0.3));
+    ball = new Ball(new Vec2(0, 14), new Vec2(BALL_RADIUS, BALL_RADIUS));
     paddle = new Paddle(new Vec2(0, 15.75), new Vec2(1.5, 0.25));
-    wallR = new Wall(new Vec2(-15, 2), new Vec2(0.5, 14));
-    wallL = new Wall(new Vec2(15, 2), new Vec2(0.5, 14));
-    wallU = new Wall(new Vec2(0, -11.5), new Vec2(15, 0.5));
+    wallR = new Wall(new Vec2(-15.5, 2), new Vec2(0.5, 14));
+    wallL = new Wall(new Vec2(15.5, 2), new Vec2(0.5, 14));
+    wallU = new Wall(new Vec2(0, -11.5), new Vec2(16, 0.5));
 
     objectsList.push(ball, paddle, wallR, wallL, wallU);
 
@@ -68,7 +68,7 @@ function initializeObjects() {
 }
 
 function initializeBallAndPaddle() {
-    ball = new Ball(new Vec2(0, 14), new Vec2(0.3, 0.3));
+    ball = new Ball(new Vec2(0, 14), new Vec2(BALL_RADIUS, BALL_RADIUS));
     paddle = new Paddle(new Vec2(0, 15.75), new Vec2(1.5, 0.25));
 
     ball.hasChanged = true;   // forces redrawn
@@ -98,7 +98,8 @@ function notifyBallDeath() {
     }
     else
     {
-        recordScore = currentScore;
+        if(currentScore > recordScore)
+            recordScore = currentScore;
         currentScore = 0;
         hasGameEnded = true;
         updateScreenText();
@@ -134,8 +135,9 @@ function updateGameState() {
                 currentScore+= 10;
                 if(currentNumBricks === 0)
                 {
-                    currentScore += currentLives * 5;
-                    recordScore = currentScore;
+                    currentScore += currentLives * 50;
+                    if(currentScore > recordScore)
+                        recordScore = currentScore;
                     currentScore = 0;
                     initializeBallAndPaddle();
                     hasGameEnded = true;
@@ -213,12 +215,54 @@ function onCheckBoxChange(value) {
     else
     {
         ThreeDOn = false;
-        PMatrix = utils.MakeProjection(gl.canvas.width/45, gl.canvas.width / gl.canvas.height, 1, 100);
+        PMatrix = utils.MakeOrthogonal(gl.canvas.width/41, gl.canvas.width / gl.canvas.height, 1, 100);
         cx = 0;
         cy = 50;
         cz = 0;
         elev = -90;
         ang = 0;
         lookRadius = 50.0;
+    }
+}
+
+function setUpMouseControls()
+{
+    // add mouse controls for 3D movement
+    canvas.addEventListener("mousedown", doMouseDown, false);
+    canvas.addEventListener("mouseup", doMouseUp, false);
+    canvas.addEventListener("mousemove", doMouseMove, false);
+    canvas.addEventListener("mousewheel", doMouseWheel, false);
+}
+
+function doMouseDown(event) {
+    lastMouseX = event.pageX;
+    lastMouseY = event.pageY;
+    mouseState = true;
+}
+function doMouseUp() {
+    lastMouseX = -100;
+    lastMouseY = -100;
+    mouseState = false;
+}
+function doMouseMove(event) {
+    if(mouseState && ThreeDOn) {
+        let dx = event.pageX - lastMouseX;
+        let dy = lastMouseY - event.pageY;
+        lastMouseX = event.pageX;
+        lastMouseY = event.pageY;
+
+        if((dx !== 0) || (dy !== 0)) {
+            ang = ang + 0.5 * dx;
+            elev = elev + 0.5 * dy;
+        }
+    }
+}
+function doMouseWheel(event) {
+    if(ThreeDOn)
+    {
+        let nLookRadius = lookRadius + event.wheelDelta/250.0;
+        if((nLookRadius > 10.0) && (nLookRadius < 75.0)) {
+            lookRadius = nLookRadius;
+        }
     }
 }
