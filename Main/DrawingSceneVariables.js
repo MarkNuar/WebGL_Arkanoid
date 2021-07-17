@@ -7,12 +7,12 @@ let modelsDir;
 let canvas
 
 //camera variables
-let cx = 0;
-let cy = 50;
-let cz = 0;
-let elev = -90;
-let ang = 0;
-let lookRadius = 50.0;
+let cx = CX;
+let cy = CY;
+let cz = CZ;
+let elev = ELEV;
+let ang = ANG;
+let lookRadius = LOOK_RADIUS;
 
 let ThreeDOn = false;
 
@@ -32,6 +32,7 @@ let meshes = null;
 
 // reference to text in html file
 let textHandle = null;
+let gameOverTextHandle = null;
 
 // texture variable
 let texture;

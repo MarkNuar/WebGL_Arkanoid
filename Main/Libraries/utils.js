@@ -430,7 +430,7 @@ var utils = {
 		return out;
 	},
 
-	createGenericWorldMatrix: function(tx, ty, tz, rx, ry, rz, sx, sy, sz) {
+	MakeGenericWorld: function(tx, ty, tz, rx, ry, rz, sx, sy, sz) {
 		let out;
 
 		let S = utils.MakeScaleNuMatrix(sx, sy, sz);
@@ -498,6 +498,5 @@ var utils = {
 		perspective[15] = 1;
 
 		return perspective;
-
 	}
 }

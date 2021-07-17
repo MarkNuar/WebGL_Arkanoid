@@ -40,23 +40,23 @@ function initializeObjects() {
 
     objectsList = []; // reset if restarting game
 
-    ball = new Ball(new Vec2(0, 14), new Vec2(BALL_RADIUS, BALL_RADIUS));
-    paddle = new Paddle(new Vec2(0, 15.75), new Vec2(1.5, 0.25));
-    wallR = new Wall(new Vec2(-15.5, 2), new Vec2(0.5, 14));
-    wallL = new Wall(new Vec2(15.5, 2), new Vec2(0.5, 14));
-    wallU = new Wall(new Vec2(0, -11.5), new Vec2(16, 0.5));
+    ball = new Ball(new Vec2(0, BALL_Y), new Vec2(BALL_RADIUS, BALL_RADIUS));
+    paddle = new Paddle(new Vec2(0, PADDLE_Y), new Vec2(1.5, 0.25));
+    wallR = new Wall(new Vec2(-15.5, 0), new Vec2(0.5, 14));
+    wallL = new Wall(new Vec2(15.5, 0), new Vec2(0.5, 14));
+    wallU = new Wall(new Vec2(0, -13.5), new Vec2(16, 0.5));
 
     objectsList.push(ball, paddle, wallR, wallL, wallU);
 
     let xStart = -12.6;
     let xStep = 2.1;
-    let yStart = 2;
+    let yStart = -4;
     let yStep = 1.1;
     for (let j = 0; j < 5; j++)
     {
         for (let i = 0; i < 13; i++)
         {
-            objectsList.push(new Brick(new Vec2(xStart+xStep*i, -yStart-yStep*j), new Vec2(1, 0.5)));
+            objectsList.push(new Brick(new Vec2(xStart+xStep*i, yStart-yStep*j), new Vec2(1, 0.5)));
         }
     }
 
@@ -68,8 +68,8 @@ function initializeObjects() {
 }
 
 function initializeBallAndPaddle() {
-    ball = new Ball(new Vec2(0, 14), new Vec2(BALL_RADIUS, BALL_RADIUS));
-    paddle = new Paddle(new Vec2(0, 15.75), new Vec2(1.5, 0.25));
+    ball = new Ball(new Vec2(0, BALL_Y), new Vec2(BALL_RADIUS, BALL_RADIUS));
+    paddle = new Paddle(new Vec2(0, PADDLE_Y), new Vec2(1.5, 0.25));
 
     ball.hasChanged = true;   // forces redrawn
     paddle.hasChanged = true; // forces redrawn
@@ -98,15 +98,7 @@ function notifyBallDeath() {
     }
     else
     {
-        if(currentScore > recordScore)
-            recordScore = currentScore;
-        currentScore = 0;
-        hasGameEnded = true;
-        updateScreenText();
-        // stop receiving inputs
-        window.removeEventListener("keydown", inputDown);
-        window.removeEventListener("keyup", inputUp);
-        inputDisabled = true;
+        stopGame();
     }
 }
 
@@ -135,17 +127,7 @@ function updateGameState() {
                 currentScore+= 10;
                 if(currentNumBricks === 0)
                 {
-                    currentScore += currentLives * 50;
-                    if(currentScore > recordScore)
-                        recordScore = currentScore;
-                    currentScore = 0;
-                    initializeBallAndPaddle();
-                    hasGameEnded = true;
-                    updateScreenText();
-                    // stop receiving inputs
-                    window.removeEventListener("keydown", inputDown);
-                    window.removeEventListener("keyup", inputUp);
-                    inputDisabled = true;
+                    stopGame();
                 }
                 else
                 {
@@ -164,6 +146,20 @@ function updateGameState() {
     }
 
     paddle.movePaddle(deltaTime);
+}
+
+function stopGame()
+{
+    currentScore += currentLives * 50;
+    if(currentScore > recordScore)
+        recordScore = currentScore;
+    initializeBallAndPaddle();
+    hasGameEnded = true;
+    updateScreenText();
+    // stop receiving inputs
+    window.removeEventListener("keydown", inputDown);
+    window.removeEventListener("keyup", inputUp);
+    inputDisabled = true;
 }
 
 
@@ -215,13 +211,13 @@ function onCheckBoxChange(value) {
     else
     {
         ThreeDOn = false;
-        PMatrix = utils.MakeOrthogonal(gl.canvas.width/41, gl.canvas.width / gl.canvas.height, 1, 100);
-        cx = 0;
-        cy = 50;
-        cz = 0;
-        elev = -90;
-        ang = 0;
-        lookRadius = 50.0;
+        PMatrix = utils.MakeOrthogonal(gl.canvas.width/45, gl.canvas.width / gl.canvas.height, 1, 100);
+        cx = CX;
+        cy = CY;
+        cz = CZ;
+        elev = ELEV;
+        ang = ANG;
+        lookRadius = LOOK_RADIUS;
     }
 }
 

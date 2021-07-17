@@ -26,7 +26,7 @@ function forceUpdateMatrices() {
 }
 
 function updateMatrix(object, index) {
-    currentMatricesList[index] = utils.createGenericWorldMatrix(
+    currentMatricesList[index] = utils.MakeGenericWorld(
         object.position.x,
         0, // always zero for this project
         object.position.y,

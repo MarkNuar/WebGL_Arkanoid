@@ -10,6 +10,7 @@ async function init() {
     await loadMeshes();
 
     textHandle = document.getElementById("text");
+    gameOverTextHandle = document.getElementById("gameOver");
 
     resetGame();
 
@@ -62,7 +63,7 @@ function main(){
     textureHandle = gl.getUniformLocation(program, "in_texture");
 
     // perspective matrix
-    PMatrix = utils.MakeOrthogonal(gl.canvas.width/41, gl.canvas.width / gl.canvas.height, 1, 100);
+    PMatrix = utils.MakeOrthogonal(gl.canvas.width/45, gl.canvas.width / gl.canvas.height, 1, 100);
     //PMatrix = utils.MakePerspective(45, gl.canvas.width / gl.canvas.height, 1, 100);
 
     // vertex array objects
@@ -106,10 +107,18 @@ function drawScene(){
 
     // view matrix
     //console.log(elev + " " + ang);
-    cz = lookRadius * Math.cos(utils.degToRad(-ang)) * Math.cos(utils.degToRad(-elev));
-    cx = lookRadius * Math.sin(utils.degToRad(-ang)) * Math.cos(utils.degToRad(-elev));
-    cy = lookRadius * Math.sin(utils.degToRad(-elev));
-    console.log(cx +" "+ cy +" " +cz);
+    if(ThreeDOn)
+    {
+        cz = lookRadius * Math.cos(utils.degToRad(-ang)) * Math.cos(utils.degToRad(-elev));
+        cx = lookRadius * Math.sin(utils.degToRad(-ang)) * Math.cos(utils.degToRad(-elev));
+        cy = lookRadius * Math.sin(utils.degToRad(-elev));
+    }
+    else
+    {
+        cx = CX;
+        cy = CY;
+        cz = CZ;
+    }
     VMatrix = utils.MakeView(cx, cy, cz, elev, ang);
 
     // transform light direction into camera space
@@ -218,22 +227,22 @@ async function loadMeshes(){
 }
 
 function updateScreenText(){
-    if(!hasGameEnded)
+    textHandle.innerHTML =
+        '        Score   : ' + currentScore + '<br>\n' +
+        '        Record  : ' + recordScore + '<br>\n' +
+        '        Lives   : ' + currentLives + '<br>\n' +
+        '        Press enter to restart';
+
+    if(hasGameEnded)
     {
-        textHandle.innerHTML =
-            '        Record  : ' + recordScore + '<br>\n' +
+        gameOverTextHandle.innerHTML =
+            '        Game Over ' + '<br>\n' +
             '        Score   : ' + currentScore + '<br>\n' +
-            '        Lives   : ' + currentLives + '<br>\n' +
+            '        Record  : ' + recordScore + '<br>\n' +
             '        Press enter to restart';
     }
     else
     {
-        textHandle.innerHTML =
-            '        Record  : ' + recordScore + '<br>\n' +
-            '        Score   : ' + currentScore + '<br>\n' +
-            '        Lives   : ' + currentLives + '<br>\n' +
-            '        Game ended, press enter to restart';
+        gameOverTextHandle.innerHTML = '';
     }
 }
-
-
