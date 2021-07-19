@@ -112,36 +112,10 @@ function updateGameState() {
     // ball starts moving when the paddle is first moved
     if(!ball.moving && (paddle.moveLeft || paddle.moveRight))
     {
-        console.log("start moving")
         ball.startMoving();
     }
-
     if(ball.moving)
     {
-        // loop over all objects in level and check collision with them
-        bricksList.forEach(brick => {
-            ball.checkAndHandleCollision(brick);
-            if(brick.hasChanged) // brick disabled
-            {
-                currentNumBricks--;
-                currentScore+= 10;
-                if(currentNumBricks === 0)
-                {
-                    stopGame();
-                }
-                else
-                {
-                    updateScreenText();
-                }
-            }
-        });
-
-        wallsList.forEach(wall => {
-            ball.checkAndHandleCollision(wall);
-        });
-
-        ball.checkAndHandleCollision(paddle);
-
         ball.moveBall(deltaTime);
     }
 

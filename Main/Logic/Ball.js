@@ -11,7 +11,6 @@ class Ball {
         this.moving = false;
     }
 
-
     startMoving() 
     {
         this.moving = true;
@@ -22,6 +21,31 @@ class Ball {
 
     moveBall(deltaTime)
     {
+
+        // loop over all objects in level and check collision with them
+        bricksList.forEach(brick => {
+            ball.checkAndHandleCollision(brick, 1);
+            if(brick.hasChanged) // brick disabled
+            {
+                currentNumBricks--;
+                currentScore+= 10;
+                if(currentNumBricks === 0)
+                {
+                    stopGame();
+                }
+                else
+                {
+                    updateScreenText();
+                }
+            }
+        });
+
+        wallsList.forEach(wall => {
+            ball.checkAndHandleCollision(wall, 1);
+        });
+
+        ball.checkAndHandleCollision(paddle, 1);
+
         this.position = this.position.add(this.velocity.normalize().scale(this.speed * deltaTime));
         this.hasChanged = true;
 
@@ -31,14 +55,15 @@ class Ball {
         }
     }
 
-    checkAndHandleCollision(otherObject)
+    checkAndHandleCollision(otherObject, speedFactor)
     {
         if(otherObject.disabled)
         {
             return;  
         }
         // else
-        let ballPosition = this.position;
+        // compute new position according to current speed
+        let ballPosition = this.position.add(this.velocity.normalize().scale((this.speed * deltaTime) / speedFactor));
         let ballRadius = this.radius;
 
         let otherHalfExtents = new Vec2(otherObject.scale.x, otherObject.scale.y);
@@ -57,12 +82,15 @@ class Ball {
 
         if(difference.getModule() < ballRadius)
         {
-            if(difference.getModule() === 0)
+            // if(difference.getModule() === 0)
+            // {
+            //     this.checkAndHandleCollision(otherObject, speedFactor++);
+            // }
+            // else
             {
-                console.error("Zero vector for different");
+                this.position = ballPosition;
+                this.handleCollision(otherObject, difference);
             }
-            console.log(otherObject.disabled);
-            this.handleCollision(otherObject, difference);
         }
     }
 
@@ -71,7 +99,7 @@ class Ball {
         if(otherObject.isPaddle) // just hit the player
         {
             this.velocity.y = - this.velocity.y;
-            this.velocity.x += (this.position.x - otherObject.position.x)/2; // it's a kind of magic
+            this.velocity.x += Math.abs((this.position.x - otherObject.position.x)*(this.position.x - otherObject.position.x)) * Math.sign(this.velocity.x) / 2; // it's a kind of magic
             if(Math.abs(this.velocity.x) > 1.5 * Math.abs(this.velocity.y))
             {
                 this.velocity.x = this.velocity.x/4;
@@ -82,9 +110,7 @@ class Ball {
         {
             if(otherObject.canBeDisabled)
             {
-                console.log("disabling");
                 otherObject.disable();
-                console.log(otherObject.disabled);
             }
             let collisionDirection = this.getCollisionDirection(difference)
             if(collisionDirection === 3 || collisionDirection === 1)
@@ -139,6 +165,10 @@ class Ball {
             }
         }
         return bestMatch;
+    }
+
+    checkSidePaddle(){
+
     }
 
     clamp = (num, min, max) => Math.min(Math.max(num, min), max);
