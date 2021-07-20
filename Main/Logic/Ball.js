@@ -96,18 +96,18 @@ class Ball {
 
     handleCollision(otherObject, difference)
     {
-        if(otherObject.isPaddle) // just hit the player
-        {
-            this.velocity.y = - this.velocity.y;
-            this.velocity.x += Math.abs((this.position.x - otherObject.position.x)*(this.position.x - otherObject.position.x)) * Math.sign(this.velocity.x) / 2; // it's a kind of magic
-            if(Math.abs(this.velocity.x) > 1.5 * Math.abs(this.velocity.y))
-            {
-                this.velocity.x = this.velocity.x/4;
-            }
-            this.velocity = this.velocity.normalize();
-        }
-        else // just hit a brick or wall
-        {
+        // if(otherObject.isPaddle) // just hit the player
+        // {
+        //     this.velocity.y = - this.velocity.y;
+        //     this.velocity.x += Math.abs((this.position.x - otherObject.position.x)*(this.position.x - otherObject.position.x)) * Math.sign(this.velocity.x) / 2; // it's a kind of magic
+        //     if(Math.abs(this.velocity.x) > 1.5 * Math.abs(this.velocity.y))
+        //     {
+        //         this.velocity.x = this.velocity.x/4;
+        //     }
+        //     this.velocity = this.velocity.normalize();
+        // }
+        // else // just hit a brick or wall
+        // {
             if(otherObject.canBeDisabled)
             {
                 otherObject.disable();
@@ -129,6 +129,10 @@ class Ball {
             else
             {
                 this.velocity.y = -this.velocity.y;
+                if(otherObject.isPaddle)
+                {
+                    this.paddleVelocityVariation(otherObject)
+                }
                 let penetration = this.radius - Math.abs(difference.y)
                 if(collisionDirection === 0)
                 {
@@ -139,7 +143,17 @@ class Ball {
                     this.position.y += (penetration);
                 }
             }
-        }        
+        // }
+    }
+
+    paddleVelocityVariation(otherObject)
+    {
+        this.velocity.x += Math.abs((this.position.x - otherObject.position.x)*(this.position.x - otherObject.position.x)) * Math.sign(this.velocity.x) / 2; // it's a kind of magic
+        if(Math.abs(this.velocity.x) > 1.5 * Math.abs(this.velocity.y))
+        {
+            this.velocity.x = this.velocity.x/4;
+        }
+        this.velocity = this.velocity.normalize();
     }
 
     getCollisionDirection(target)
