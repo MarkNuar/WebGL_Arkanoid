@@ -82,11 +82,6 @@ class Ball {
 
         if(difference.getModule() < ballRadius)
         {
-            // if(difference.getModule() === 0)
-            // {
-            //     this.checkAndHandleCollision(otherObject, speedFactor++);
-            // }
-            // else
             {
                 this.position = ballPosition;
                 this.handleCollision(otherObject, difference);
@@ -96,54 +91,41 @@ class Ball {
 
     handleCollision(otherObject, difference)
     {
-        // if(otherObject.isPaddle) // just hit the player
-        // {
-        //     this.velocity.y = - this.velocity.y;
-        //     this.velocity.x += Math.abs((this.position.x - otherObject.position.x)*(this.position.x - otherObject.position.x)) * Math.sign(this.velocity.x) / 2; // it's a kind of magic
-        //     if(Math.abs(this.velocity.x) > 1.5 * Math.abs(this.velocity.y))
-        //     {
-        //         this.velocity.x = this.velocity.x/4;
-        //     }
-        //     this.velocity = this.velocity.normalize();
-        // }
-        // else // just hit a brick or wall
-        // {
-            if(otherObject.canBeDisabled)
+        if(otherObject.canBeDisabled)
+        {
+            otherObject.disable();
+        }
+        let collisionDirection = this.getCollisionDirection(difference)
+        if(collisionDirection === 3 || collisionDirection === 1)
+        {
+            this.velocity.x = -this.velocity.x;
+            let penetration = this.radius - Math.abs(difference.x)
+            if(collisionDirection === 3)
             {
-                otherObject.disable();
-            }
-            let collisionDirection = this.getCollisionDirection(difference)
-            if(collisionDirection === 3 || collisionDirection === 1)
-            {
-                this.velocity.x = -this.velocity.x;
-                let penetration = this.radius - Math.abs(difference.x)
-                if(collisionDirection === 3)
-                {
-                    this.position.x += (penetration);
-                }
-                else
-                {
-                    this.position.x -= (penetration);
-                }
+                this.position.x += (penetration);
             }
             else
             {
-                this.velocity.y = -this.velocity.y;
-                if(otherObject.isPaddle)
-                {
-                    this.paddleVelocityVariation(otherObject)
-                }
-                let penetration = this.radius - Math.abs(difference.y)
-                if(collisionDirection === 0)
-                {
-                    this.position.y -= (penetration);
-                }
-                else
-                {
-                    this.position.y += (penetration);
-                }
+                this.position.x -= (penetration);
             }
-        // }
+        }
+        else
+        {
+            this.velocity.y = -this.velocity.y;
+            if(otherObject.isPaddle)
+            {
+                this.paddleVelocityVariation(otherObject)
+            }
+            let penetration = this.radius - Math.abs(difference.y)
+            if(collisionDirection === 0)
+            {
+                this.position.y -= (penetration);
+            }
+            else
+            {
+                this.position.y += (penetration);
+            }
+        }
     }
 
     paddleVelocityVariation(otherObject)

@@ -83,3 +83,11 @@ let PMatrix;
 let VMatrix;
 // vertex array objects
 let vaos;
+
+let dirLightAlphaHandle;
+let dirLightBetaHandle;
+
+let ballSpeedHandle;
+let paddleSpeedHandle;
+
+

@@ -6,6 +6,7 @@ async function init() {
 
     setupCanvas();
     setUpMouseControls();
+
     await loadShaders();
     await loadMeshes();
 
@@ -13,6 +14,11 @@ async function init() {
     gameOverTextHandle = document.getElementById("gameOver");
     gameOverDiv = document.getElementById("gameOverDiv");
 
+    dirLightAlphaHandle = document.getElementById("dirLightAlpha");
+    dirLightBetaHandle = document.getElementById("dirLightBeta");
+
+    ballSpeedHandle = document.getElementById("ballSpeed");
+    paddleSpeedHandle = document.getElementById("paddleSpeed");
 
     resetGame();
 
@@ -66,7 +72,6 @@ function main(){
 
     // perspective matrix
     PMatrix = utils.MakeOrthogonal(gl.canvas.width/45, gl.canvas.width / gl.canvas.height, 1, 100);
-    //PMatrix = utils.MakePerspective(45, gl.canvas.width / gl.canvas.height, 1, 100);
 
     // vertex array objects
     vaos = new Array(meshes.length);
@@ -94,6 +99,10 @@ function drawScene(){
     gl.clearColor(0.0, 0.0, 0.0, 1); // sets wallpaper color
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
+    // get and set ball and paddle speeds
+    BALL_SPEED = ballSpeedHandle.value / 1000;
+    PADDLE_SPEED = paddleSpeedHandle.value / 1000;
+
     // update game state, animations
     updateGameState();
 
@@ -101,8 +110,8 @@ function drawScene(){
     updateMatrices();
 
     // get directional light directions
-    dirLightAlpha = utils.degToRad(document.getElementById("dirLightAlpha").value);
-    dirLightBeta = utils.degToRad(document.getElementById("dirLightBeta").value);
+    dirLightAlpha = utils.degToRad(dirLightAlphaHandle.value);
+    dirLightBeta = utils.degToRad(dirLightBetaHandle.value);
     directionalLightDirection = [Math.sin(dirLightAlpha) * Math.cos(dirLightBeta),
             Math.cos(dirLightAlpha),
             Math.sin(dirLightAlpha) * Math.sin(dirLightBeta)];

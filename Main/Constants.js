@@ -1,7 +1,7 @@
-const BALL_SPEED = 0.015;
+let BALL_SPEED = 0.015;
 const BALL_RADIUS = 0.5;
 
-const PADDLE_SPEED = 0.013;
+let PADDLE_SPEED = 0.013;
 
 const PADDLE_Y = 13.75
 const BALL_Y = 12
